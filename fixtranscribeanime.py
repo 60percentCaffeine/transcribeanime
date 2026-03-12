@@ -15,6 +15,7 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
+from difflib import SequenceMatcher
 from pathlib import Path
 
 import requests
@@ -427,6 +428,54 @@ def apply_fixes(transcribed: str, fixes: list[dict]) -> str:
     return result
 
 
+def deduplicate_segments(subs: list[Sub], window: int = 3) -> list[Sub]:
+    """Remove duplicate and near-duplicate ASR segments.
+
+    Checks each segment against nearby segments (within window) for:
+    1. Exact duplicates (same text) — remove the later one
+    2. High similarity (SequenceMatcher ratio >= 0.9) — remove the shorter one
+    """
+    if not subs:
+        return subs
+
+    to_remove = set()
+
+    for i in range(len(subs)):
+        if i in to_remove:
+            continue
+        for j in range(i + 1, min(i + window + 1, len(subs))):
+            if j in to_remove:
+                continue
+
+            text_i = subs[i].text.strip()
+            text_j = subs[j].text.strip()
+
+            if not text_i or not text_j:
+                continue
+
+            # Exact duplicate
+            if text_i == text_j:
+                print(f"  [dedup] removing seg {subs[j].index} '{text_j}' (exact duplicate of seg {subs[i].index})")
+                to_remove.add(j)
+                continue
+
+            # High similarity — remove the shorter one
+            ratio = SequenceMatcher(None, text_i, text_j).ratio()
+            if ratio >= 0.9:
+                if len(text_i) <= len(text_j):
+                    print(f"  [dedup] removing seg {subs[i].index} '{text_i}' (similar to seg {subs[j].index}, ratio={ratio:.2f})")
+                    to_remove.add(i)
+                    break
+                else:
+                    print(f"  [dedup] removing seg {subs[j].index} '{text_j}' (similar to seg {subs[i].index}, ratio={ratio:.2f})")
+                    to_remove.add(j)
+
+    result = [s for idx, s in enumerate(subs) if idx not in to_remove]
+    if to_remove:
+        print(f"  [dedup] removed {len(to_remove)} duplicate/near-duplicate segments")
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Fix ML-transcribed Mandarin subtitles using reference subs + LLM"
@@ -499,6 +548,10 @@ def main():
                 print(f"  [{i+1}/{len(input_subs)}] {original} (unchanged)")
 
     corrected_subs = results
+
+    # Deduplicate segments (remove exact/near-duplicate ASR segments)
+    print(f"\nDeduplicating segments...")
+    corrected_subs = deduplicate_segments(corrected_subs)
 
     # Write output
     out_lines = []
