@@ -428,6 +428,47 @@ def apply_fixes(transcribed: str, fixes: list[dict]) -> str:
     return result
 
 
+def normalize_numbers(text: str) -> str:
+    """Convert Chinese numerals to Arabic in number+counter patterns.
+
+    E.g. 三年→3年, 六小時→6小時, 二十個→20個.
+    Only converts when followed by a counter/unit word to avoid false positives.
+    """
+    cn_digits = {'零': 0, '一': 1, '二': 2, '三': 3, '四': 4,
+                 '五': 5, '六': 6, '七': 7, '八': 8, '九': 9, '十': 10}
+
+    def cn_to_arabic(s: str) -> int | None:
+        """Convert a short Chinese numeral string to an integer (up to 99)."""
+        if not s:
+            return None
+        if len(s) == 1:
+            return cn_digits.get(s)
+        # Handle 十X, X十, X十X patterns
+        if s == '十':
+            return 10
+        if len(s) == 2 and s[0] == '十' and s[1] in cn_digits:
+            return 10 + cn_digits[s[1]]
+        if len(s) == 2 and s[0] in cn_digits and s[1] == '十':
+            return cn_digits[s[0]] * 10
+        if len(s) == 3 and s[0] in cn_digits and s[1] == '十' and s[2] in cn_digits:
+            return cn_digits[s[0]] * 10 + cn_digits[s[2]]
+        return None
+
+    counters = r'(?:小時|分鐘|公里|公斤|[年月日天時分秒個位樓號班組排期屆次集歲杯瓶件張把隻條首頁篇章節回場局步塊圈人])'
+    # Exclude 一 — in subtitles it almost always means "a/an" not "1"
+    num_chars = r'[零二三四五六七八九十]'
+    pattern = rf'({num_chars}{{1,3}})({counters})'
+
+    def replace_match(m):
+        cn_str, counter = m.group(1), m.group(2)
+        val = cn_to_arabic(cn_str)
+        if val is not None:
+            return f"{val}{counter}"
+        return m.group(0)
+
+    return re.sub(pattern, replace_match, text)
+
+
 def deduplicate_segments(subs: list[Sub], window: int = 3) -> list[Sub]:
     """Remove duplicate and near-duplicate ASR segments.
 
@@ -552,6 +593,14 @@ def main():
     # Deduplicate segments (remove exact/near-duplicate ASR segments)
     print(f"\nDeduplicating segments...")
     corrected_subs = deduplicate_segments(corrected_subs)
+
+    # Normalize number format (Chinese numerals → Arabic in number+counter patterns)
+    print(f"\nNormalizing numbers...")
+    for sub in corrected_subs:
+        normalized = normalize_numbers(sub.text)
+        if normalized != sub.text:
+            print(f"  [{sub.index}] {sub.text} → {normalized}")
+            sub.text = normalized
 
     # Write output
     out_lines = []
