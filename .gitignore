@@ -4,3 +4,4 @@ test2.srt
 test_mlx.srt
 .env
 __pycache__*
+log.txt

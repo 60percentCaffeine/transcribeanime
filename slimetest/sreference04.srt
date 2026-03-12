@@ -1,0 +1,1669 @@
+1
+00:00:00,450 --> 00:00:05,000
+<font face="FZZhunYuan-M02" size="68"><b>フィクショソ</b></font>
+
+2
+00:00:00,450 --> 00:00:05,000
+<font face="FZZhunYuan-M02" size="68"><b>まだ誰も知らない想象を超えていく</b></font>
+
+3
+00:00:00,450 --> 00:00:05,000
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}超越無人所及的想像</b></font>
+
+4
+00:00:05,290 --> 00:00:10,500
+<font face="FZZhunYuan-M02" size="68"><b>ものがたり</b></font>
+
+5
+00:00:05,290 --> 00:00:10,500
+<font face="FZZhunYuan-M02" size="68"><b>名も無い人生を開け!</b></font>
+
+6
+00:00:05,290 --> 00:00:10,500
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}開啟無名人生的物語</b></font>
+
+7
+00:00:13,590 --> 00:00:15,780
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}手抄自桜都字幕組,部分参考動漫国字幕組,並修改一些錯別字不通順詞語。
+OP1 ED1歌詞均參考自萌娘百科</b></font>
+
+8
+00:00:23,310 --> 00:00:27,390
+<font face="FZZhunYuan-M02" size="68"><b>きぼう</b></font>
+
+9
+00:00:23,310 --> 00:00:27,390
+<font face="FZZhunYuan-M02" size="68"><b>見上げた空に広がる明日</b></font>
+
+10
+00:00:23,310 --> 00:00:27,390
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}希望</b></font>
+
+11
+00:00:23,310 --> 00:00:27,390
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}遙望的天空 無垠的明天</b></font>
+
+12
+00:00:28,150 --> 00:00:28,980
+<font face="FZZhunYuan-M02" size="68"><b>「what's the name?」</b></font>
+
+13
+00:00:28,150 --> 00:00:28,980
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}"what’s the name?"</b></font>
+
+14
+00:00:28,980 --> 00:00:32,220
+<font face="FZZhunYuan-M02" size="68"><b>曖昧な日々に惑う</b></font>
+
+15
+00:00:28,980 --> 00:00:32,220
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}在曖昧的日常中不知所措</b></font>
+
+16
+00:00:33,430 --> 00:00:37,730
+<font face="FZZhunYuan-M02" size="68"><b>立ちすくむような遥かな夢も</b></font>
+
+17
+00:00:33,430 --> 00:00:37,730
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}止步不前的話 那遙不可及的夢</b></font>
+
+18
+00:00:38,070 --> 00:00:42,060
+<font face="FZZhunYuan-M02" size="68"><b>絶望も食らいつくして</b></font>
+
+19
+00:00:38,070 --> 00:00:42,060
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}以及絕望都將被吞噬殆盡</b></font>
+
+20
+00:00:43,080 --> 00:00:47,320
+<font face="FZZhunYuan-M02" size="68"><b>願いの形　刻み込む声</b></font>
+
+21
+00:00:43,080 --> 00:00:47,320
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}祈願之形 銘刻之聲</b></font>
+
+22
+00:00:47,830 --> 00:00:52,000
+<font face="FZZhunYuan-M02" size="68"><b>もっともっと強く</b></font>
+
+23
+00:00:47,830 --> 00:00:52,000
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}更強 更強</b></font>
+
+24
+00:00:52,000 --> 00:00:54,990
+<font face="FZZhunYuan-M02" size="68"><b>fly high!</b></font>
+
+25
+00:00:52,000 --> 00:00:54,990
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}fly high!</b></font>
+
+26
+00:00:57,010 --> 00:01:01,920
+<font face="FZZhunYuan-M02" size="68"><b>フィクショソ</b></font>
+
+27
+00:00:57,010 --> 00:01:01,920
+<font face="FZZhunYuan-M02" size="68"><b>まだ誰も知らない想像の向こうで</b></font>
+
+28
+00:00:57,010 --> 00:01:01,920
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}在無人所及的想像前方</b></font>
+
+29
+00:01:01,930 --> 00:01:05,170
+<font face="FZZhunYuan-M02" size="68"><b>ジリジリと芽生えた衝動的な</b></font>
+
+30
+00:01:01,930 --> 00:01:05,170
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}焦躁之中萌發的衝動</b></font>
+
+31
+00:01:05,180 --> 00:01:06,840
+<font face="FZZhunYuan-M02" size="68"><b>skill to stay alive</b></font>
+
+32
+00:01:05,180 --> 00:01:06,840
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}skill to stay alive</b></font>
+
+33
+00:01:06,850 --> 00:01:09,930
+<font face="FZZhunYuan-M02" size="68"><b>リアル</b></font>
+
+34
+00:01:06,850 --> 00:01:09,930
+<font face="FZZhunYuan-M02" size="68"><b>今感じる全てが現実なら</b></font>
+
+35
+00:01:06,850 --> 00:01:09,930
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}此刻感到的一切若是現實</b></font>
+
+36
+00:01:09,940 --> 00:01:11,930
+<font face="FZZhunYuan-M02" size="68"><b>いつか証になるだろう</b></font>
+
+37
+00:01:09,940 --> 00:01:11,930
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}總有其佐證現身之時</b></font>
+
+38
+00:01:11,940 --> 00:01:13,270
+<font face="FZZhunYuan-M02" size="68"><b>一つ一つ</b></font>
+
+39
+00:01:11,940 --> 00:01:13,270
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}一個接一個</b></font>
+
+40
+00:01:13,270 --> 00:01:16,520
+<font face="FZZhunYuan-M02" size="68"><b>キミ</b></font>
+
+41
+00:01:13,270 --> 00:01:16,520
+<font face="FZZhunYuan-M02" size="68"><b>人生を名付けに行こう</b></font>
+
+42
+00:01:13,270 --> 00:01:16,520
+<font face="FZZhunYuan-M02" size="68"><b>你</b></font>
+
+43
+00:01:13,270 --> 00:01:16,520
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}給人生賦予其名</b></font>
+
+44
+00:01:17,030 --> 00:01:18,930
+<font face="FZZhunYuan-M02" size="68"><b>(to the east, to the west, to the high)</b></font>
+
+45
+00:01:17,030 --> 00:01:18,930
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}(東西南北，勇攀高峰)</b></font>
+
+46
+00:01:18,940 --> 00:01:21,530
+<font face="FZZhunYuan-M02" size="68"><b>stand up to the period!</b></font>
+
+47
+00:01:22,030 --> 00:01:24,270
+<font face="FZZhunYuan-M02" size="68"><b>さぁ行こう!</b></font>
+
+48
+00:01:22,030 --> 00:01:24,270
+<font face="FZZhunYuan-M02" size="68"><b>{\an8}向終點出發吧!</b></font>
+
+49
+00:01:24,180 --> 00:01:24,180
+<font face="FZZhunYuan-M02" size="68"><b></b></font>
+
+50
+00:01:30,480 --> 00:01:34,490
+<font face="FZZhunYuan-M02" size="68"><b>{\an5}<font color="#000000">阿梅爾德大河</font></b></font>
+
+51
+00:01:35,200 --> 00:01:39,150
+<font face="FZZhunYuan-M02" size="68"><b><font size="60">第4話 在矮人王國</font></b></font>
+
+52
+00:01:39,700 --> 00:01:43,190
+<font face="FZZhunYuan-M02" size="68"><b>利姆路一行人沿著阿梅爾德大河前進</b></font>
+
+53
+00:01:43,870 --> 00:01:47,530
+<font face="FZZhunYuan-M02" size="68"><b>為了找到能給哥布林做衣服和房屋技術人員</b></font>
+
+54
+00:01:48,040 --> 00:01:50,620
+<font face="FZZhunYuan-M02" size="68"><b>前往矮人王國德瓦崗</b></font>
+
+55
+00:01:51,620 --> 00:01:53,530
+<font face="FZZhunYuan-M02" size="68"><b>同行的人裡有利格魯和另外兩人</b></font>
+
+56
+00:01:54,040 --> 00:01:58,540
+<font face="FZZhunYuan-M02" size="68"><b>以及由說去過一次德瓦崗的哥布塔帶路</b></font>
+
+57
+00:02:01,720 --> 00:02:07,300
+<font face="FZZhunYuan-M02" size="68"><b>由牙狼進化來的嵐加狼的移動速度猶如風一般迅捷</b></font>
+
+58
+00:02:09,560 --> 00:02:11,060
+<font face="FZZhunYuan-M02" size="68"><b>別太勉強了</b></font>
+
+59
+00:02:11,390 --> 00:02:11,890
+<font face="FZZhunYuan-M02" size="68"><b>是</b></font>
+
+60
+00:02:14,730 --> 00:02:16,970
+<font face="FZZhunYuan-M02" size="68"><b>為什麼要加速啊啊啊</b></font>
+
+61
+00:02:24,990 --> 00:02:28,480
+<font face="FZZhunYuan-M02" size="68"><b>利格魯 你的哥哥的名字是誰取的?</b></font>
+
+62
+00:02:29,580 --> 00:02:33,070
+<font face="FZZhunYuan-M02" size="68"><b>哥哥是路過的魔族格魯米德大人賜名的</b></font>
+
+63
+00:02:33,500 --> 00:02:34,830
+<font face="FZZhunYuan-M02" size="68"><b>說是他很有潛力</b></font>
+
+64
+00:02:35,500 --> 00:02:36,410
+<font face="FZZhunYuan-M02" size="68"><b>格魯?</b></font>
+
+65
+00:02:37,090 --> 00:02:39,920
+<font face="FZZhunYuan-M02" size="68"><b>格魯米德 魔王軍的幹部</b></font>
+
+66
+00:02:41,510 --> 00:02:44,340
+<font face="FZZhunYuan-M02" size="68"><b>魔王軍? 原來有魔王的嗎</b></font>
+
+67
+00:02:45,260 --> 00:02:47,920
+<font face="FZZhunYuan-M02" size="68"><b>維爾德拉倒是也說了有勇者來著</b></font>
+
+68
+00:02:48,930 --> 00:02:52,090
+<font face="FZZhunYuan-M02" size="68"><b>聽起來很麻煩的樣子 還是別跟他們沾上關係吧</b></font>
+
+69
+00:03:04,950 --> 00:03:05,860
+<font face="FZZhunYuan-M02" size="68"><b>喂 嵐加</b></font>
+
+70
+00:03:07,870 --> 00:03:11,200
+<font face="FZZhunYuan-M02" size="68"><b>我算是你的殺父仇人吧</b></font>
+
+71
+00:03:11,620 --> 00:03:13,360
+<font face="FZZhunYuan-M02" size="68"><b>這件事情你不在意的嗎</b></font>
+
+72
+00:03:14,540 --> 00:03:16,370
+<font face="FZZhunYuan-M02" size="68"><b>我一直都很在意</b></font>
+
+73
+00:03:19,210 --> 00:03:20,540
+<font face="FZZhunYuan-M02" size="68"><b>有時候會想起</b></font>
+
+74
+00:03:22,710 --> 00:03:26,880
+<font face="FZZhunYuan-M02" size="68"><b>但是主人您不但放過了戰敗的我們</b></font>
+
+75
+00:03:27,720 --> 00:03:29,380
+<font face="FZZhunYuan-M02" size="68"><b>甚至還給我們取了名字</b></font>
+
+76
+00:03:31,060 --> 00:03:34,220
+<font face="FZZhunYuan-M02" size="68"><b>只有心懷感激 絕不會有什麼恨意</b></font>
+
+77
+00:03:36,560 --> 00:03:41,230
+<font face="FZZhunYuan-M02" size="68"><b>我們的忠義只屬於主人您一人</b></font>
+
+78
+00:03:47,410 --> 00:03:47,990
+<font face="FZZhunYuan-M02" size="68"><b>哥布塔</b></font>
+
+79
+00:03:47,990 --> 00:03:48,650
+<font face="FZZhunYuan-M02" size="68"><b>在</b></font>
+
+80
+00:03:49,660 --> 00:03:52,150
+<font face="FZZhunYuan-M02" size="68"><b>我們要前往的城市是什麼樣的</b></font>
+
+81
+00:03:52,580 --> 00:03:57,570
+<font face="FZZhunYuan-M02" size="68"><b>那個 正式名稱是武裝國家德瓦崗</b></font>
+
+82
+00:03:58,250 --> 00:04:01,240
+<font face="FZZhunYuan-M02" size="68"><b>是由一個天然大洞穴改造而成的美麗都市</b></font>
+
+83
+00:04:01,420 --> 00:04:05,080
+<font face="FZZhunYuan-M02" size="68"><b>那裡不光住著矮人 還住了很多精靈和人類</b></font>
+
+84
+00:04:05,340 --> 00:04:05,920
+<font face="FZZhunYuan-M02" size="68"><b>精靈!</b></font>
+
+85
+00:04:08,340 --> 00:04:09,500
+<font face="FZZhunYuan-M02" size="68"><b>精靈嗎</b></font>
+
+86
+00:04:10,510 --> 00:04:16,680
+<font face="FZZhunYuan-M02" size="68"><b>國王蓋札·德瓦崗被稱為英雄王 深受國民尊崇</b></font>
+
+87
+00:04:17,190 --> 00:04:18,100
+<font face="FZZhunYuan-M02" size="68"><b>精靈</b></font>
+
+88
+00:04:18,850 --> 00:04:19,930
+<font face="FZZhunYuan-M02" size="68"><b>精靈～</b></font>
+
+89
+00:04:20,270 --> 00:04:20,930
+<font face="FZZhunYuan-M02" size="68"><b>利姆路大人?</b></font>
+
+90
+00:04:21,860 --> 00:04:26,100
+<font face="FZZhunYuan-M02" size="68"><b>像我這樣的魔物能進德瓦崗嗎?</b></font>
+
+91
+00:04:26,780 --> 00:04:28,030
+<font face="FZZhunYuan-M02" size="68"><b>不用擔心</b></font>
+
+92
+00:04:28,280 --> 00:04:30,860
+<font face="FZZhunYuan-M02" size="68"><b>德瓦崗是中立的自由貿易都市</b></font>
+
+93
+00:04:31,280 --> 00:04:34,780
+<font face="FZZhunYuan-M02" size="68"><b>國王禁止了那片區域的一切爭鬥</b></font>
+
+94
+00:04:36,540 --> 00:04:41,370
+<font face="FZZhunYuan-M02" size="68"><b>能做到這點 就證明了武裝國家德瓦崗的強大軍事能力</b></font>
+
+95
+00:04:42,290 --> 00:04:45,630
+<font face="FZZhunYuan-M02" size="68"><b>聽說近千年矮人軍都未嘗一敗</b></font>
+
+96
+00:04:45,800 --> 00:04:48,210
+<font face="FZZhunYuan-M02" size="68"><b>千年?! 這還真厲害</b></font>
+
+97
+00:04:50,800 --> 00:04:54,470
+<font face="FZZhunYuan-M02" size="68"><b>確實也不會有想和那樣無敵的王為敵的人啊</b></font>
+
+98
+00:04:56,390 --> 00:04:59,380
+<font face="FZZhunYuan-M02" size="68"><b><font size="60">{\an8}我之前去的時候被擋在門外了</font></b></font>
+
+99
+00:04:58,440 --> 00:05:01,130
+<font face="FZZhunYuan-M02" size="68"><b>不會有麻煩的啦</b></font>
+
+100
+00:05:03,400 --> 00:05:07,390
+<font face="FZZhunYuan-M02" size="68"><b>怎麼感覺剛剛立了一個很大的flag</b></font>
+
+101
+00:05:07,820 --> 00:05:10,650
+<font face="FZZhunYuan-M02" size="68"><b>啊利姆路大人 肉烤得很不錯哦</b></font>
+
+102
+00:05:12,410 --> 00:05:17,570
+<font face="FZZhunYuan-M02" size="68"><b>以哥布林的腳程前往矮人之國據說要花兩個月</b></font>
+
+103
+00:05:17,630 --> 00:05:20,380
+<font face="FZZhunYuan-M02" size="68"><b><font size="60">{\an5}<font color="#000000">卡納多山脈</font></font></b></font>
+
+104
+00:05:21,000 --> 00:05:26,840
+<font face="FZZhunYuan-M02" size="68"><b>這個距離在嵐加他們的努力下 利姆路一行三天就到了</b></font>
+
+105
+00:05:29,930 --> 00:05:34,680
+<font face="FZZhunYuan-M02" size="68"><b><font size="60">{\an5}武裝國家德瓦崗</font></b></font>
+
+106
+00:05:30,180 --> 00:05:34,670
+<font face="FZZhunYuan-M02" size="68"><b>那裡有精靈～啊不對 有矮人呢</b></font>
+
+107
+00:05:35,100 --> 00:05:40,840
+<font face="FZZhunYuan-M02" size="68"><b>能見到很棒的精靈 啊不對 熟練的工匠就好了</b></font>
+
+108
+00:05:42,020 --> 00:05:45,260
+<font face="FZZhunYuan-M02" size="68"><b>真的只要哥布塔和您一起去就好了嗎</b></font>
+
+109
+00:05:45,860 --> 00:05:49,190
+<font face="FZZhunYuan-M02" size="68"><b>嗯 人最好少點不引人注目</b></font>
+
+110
+00:05:49,860 --> 00:05:51,520
+<font face="FZZhunYuan-M02" size="68"><b>哥布塔帶路就行了</b></font>
+
+111
+00:05:51,860 --> 00:05:52,610
+<font face="FZZhunYuan-M02" size="68"><b>但是</b></font>
+
+112
+00:05:53,030 --> 00:05:54,280
+<font face="FZZhunYuan-M02" size="68"><b>沒事的</b></font>
+
+113
+00:05:54,450 --> 00:05:55,860
+<font face="FZZhunYuan-M02" size="68"><b>主人</b></font>
+
+114
+00:05:56,620 --> 00:05:58,010
+<font face="FZZhunYuan-M02" size="68"><b>不用擔心</b></font>
+
+115
+00:05:58,540 --> 00:05:59,870
+<font face="FZZhunYuan-M02" size="68"><b>那我走了</b></font>
+
+116
+00:06:00,120 --> 00:06:01,360
+<font face="FZZhunYuan-M02" size="68"><b>你們在這裡等著</b></font>
+
+117
+00:06:03,540 --> 00:06:04,370
+<font face="FZZhunYuan-M02" size="68"><b>路上小心</b></font>
+
+118
+00:06:13,050 --> 00:06:14,380
+<font face="FZZhunYuan-M02" size="68"><b>隊伍好長啊</b></font>
+
+119
+00:06:14,890 --> 00:06:16,220
+<font face="FZZhunYuan-M02" size="68"><b>檢查好像也很嚴</b></font>
+
+120
+00:06:16,810 --> 00:06:19,970
+<font face="FZZhunYuan-M02" size="68"><b>進去的話就能自由活動了</b></font>
+
+121
+00:06:20,230 --> 00:06:21,890
+<font face="FZZhunYuan-M02" size="68"><b>自由嗎</b></font>
+
+122
+00:06:29,320 --> 00:06:31,230
+<font face="FZZhunYuan-M02" size="68"><b>這裡居然有魔物</b></font>
+
+123
+00:06:31,570 --> 00:06:35,150
+<font face="FZZhunYuan-M02" size="68"><b>反正還沒進去 在這裡幹掉你們不也行嗎</b></font>
+
+124
+00:06:35,240 --> 00:06:38,480
+<font face="FZZhunYuan-M02" size="68"><b>好的 馬上就被纏上了 flag回收</b></font>
+
+125
+00:06:39,160 --> 00:06:41,650
+<font face="FZZhunYuan-M02" size="68"><b>喂喂 哥布塔 你有聽到什麼嗎</b></font>
+
+126
+00:06:42,080 --> 00:06:43,990
+<font face="FZZhunYuan-M02" size="68"><b>是的 聽到了</b></font>
+
+127
+00:06:44,330 --> 00:06:47,000
+<font face="FZZhunYuan-M02" size="68"><b>之前來的時候也是在這裡被暴揍了啊</b></font>
+
+128
+00:06:47,420 --> 00:06:50,330
+<font face="FZZhunYuan-M02" size="68"><b>這就如同弱小魔物的宿命一樣</b></font>
+
+129
+00:06:50,670 --> 00:06:52,170
+<font face="FZZhunYuan-M02" size="68"><b>宿命啊</b></font>
+
+130
+00:06:52,920 --> 00:06:55,840
+<font face="FZZhunYuan-M02" size="68"><b>喂廢物魔物 別無視我們啊</b></font>
+
+131
+00:06:56,090 --> 00:06:58,930
+<font face="FZZhunYuan-M02" size="68"><b>話說 會說話的史萊姆很稀有啊</b></font>
+
+132
+00:06:59,010 --> 00:07:00,930
+<font face="FZZhunYuan-M02" size="68"><b>能當個稀罕東西賣個好價錢吶</b></font>
+
+133
+00:07:01,430 --> 00:07:04,600
+<font face="FZZhunYuan-M02" size="68"><b>哥布塔 記得規矩一嗎</b></font>
+
+134
+00:07:04,770 --> 00:07:06,010
+<font face="FZZhunYuan-M02" size="68"><b>當然 肯定記得</b></font>
+
+135
+00:07:06,360 --> 00:07:08,440
+<font face="FZZhunYuan-M02" size="68"><b>規矩— 不襲擊人類</b></font>
+
+136
+00:07:08,610 --> 00:07:11,600
+<font face="FZZhunYuan-M02" size="68"><b>那麼 你就把眼睛遮住耳朵堵住</b></font>
+
+137
+00:07:12,360 --> 00:07:14,020
+<font face="FZZhunYuan-M02" size="68"><b>絕對不能看這邊</b></font>
+
+138
+00:07:14,450 --> 00:07:15,530
+<font face="FZZhunYuan-M02" size="68"><b>了解了</b></font>
+
+139
+00:07:16,780 --> 00:07:18,110
+<font face="FZZhunYuan-M02" size="68"><b>那麼現在</b></font>
+
+140
+00:07:21,450 --> 00:07:25,290
+<font face="FZZhunYuan-M02" size="68"><b>喂喂 我可是很寬容的 現在的話還可以原諒你們</b></font>
+
+141
+00:07:25,540 --> 00:07:26,620
+<font face="FZZhunYuan-M02" size="68"><b>趕緊讓開</b></font>
+
+142
+00:07:30,050 --> 00:07:33,290
+<font face="FZZhunYuan-M02" size="68"><b>明明不過是該死的低等魔物 別小看我們啊</b></font>
+
+143
+00:07:33,550 --> 00:07:36,880
+<font face="FZZhunYuan-M02" size="68"><b>你馬上就要死了 我還想著活捉你的</b></font>
+
+144
+00:07:36,970 --> 00:07:39,220
+<font face="FZZhunYuan-M02" size="68"><b>既然已經激怒我們了 就別想好好活著了</b></font>
+
+145
+00:07:39,390 --> 00:07:40,800
+<font face="FZZhunYuan-M02" size="68"><b>啊 雜魚的台詞</b></font>
+
+146
+00:07:41,720 --> 00:07:45,310
+<font face="FZZhunYuan-M02" size="68"><b>該死的低等魔物? 是在說我嗎</b></font>
+
+147
+00:07:45,480 --> 00:07:46,970
+<font face="FZZhunYuan-M02" size="68"><b>當然是你這傢伙啊!</b></font>
+
+148
+00:07:47,150 --> 00:07:50,140
+<font face="FZZhunYuan-M02" size="68"><b>哦哦 因為我看起來像史萊姆嗎</b></font>
+
+149
+00:07:51,070 --> 00:07:52,480
+<font face="FZZhunYuan-M02" size="68"><b>雖然確實是了</b></font>
+
+150
+00:07:54,820 --> 00:07:57,730
+<font face="FZZhunYuan-M02" size="68"><b>你們什麼時候把我搞錯以為是史萊姆了</b></font>
+
+151
+00:07:58,070 --> 00:08:00,910
+<font face="FZZhunYuan-M02" size="68"><b>給你們見識一下 我真正的姿態吧</b></font>
+
+152
+00:08:09,330 --> 00:08:12,000
+<font face="FZZhunYuan-M02" size="68"><b>哎 擬態好像進化了</b></font>
+
+153
+00:08:12,670 --> 00:08:14,910
+<font face="FZZhunYuan-M02" size="68"><b>切 反正只是外表吧</b></font>
+
+154
+00:08:15,260 --> 00:08:17,750
+<font face="FZZhunYuan-M02" size="68"><b>你以為這樣就能嚇退我們嗎</b></font>
+
+155
+00:08:17,840 --> 00:08:20,330
+<font face="FZZhunYuan-M02" size="68"><b>啊你們快逃啊 好麻煩的</b></font>
+
+156
+00:08:20,680 --> 00:08:24,510
+<font face="FZZhunYuan-M02" size="68"><b>好吧好吧 夠了 你們上吧</b></font>
+
+157
+00:08:25,020 --> 00:08:26,010
+<font face="FZZhunYuan-M02" size="68"><b>去死吧</b></font>
+
+158
+00:08:26,270 --> 00:08:27,350
+<font face="FZZhunYuan-M02" size="68"><b>你們也動手</b></font>
+
+159
+00:08:28,190 --> 00:08:29,180
+<font face="FZZhunYuan-M02" size="68"><b>同伴變多了</b></font>
+
+160
+00:08:30,110 --> 00:08:31,190
+<font face="FZZhunYuan-M02" size="68"><b>看招!</b></font>
+
+161
+00:08:31,610 --> 00:08:32,770
+<font face="FZZhunYuan-M02" size="68"><b>斬擊</b></font>
+
+162
+00:08:33,190 --> 00:08:34,850
+<font face="FZZhunYuan-M02" size="68"><b>重破斬</b></font>
+
+163
+00:08:35,690 --> 00:08:37,610
+<font face="FZZhunYuan-M02" size="68"><b>火焰球</b></font>
+
+164
+00:08:38,280 --> 00:08:39,520
+<font face="FZZhunYuan-M02" size="68"><b>魔法牆</b></font>
+
+165
+00:08:44,450 --> 00:08:45,690
+<font face="FZZhunYuan-M02" size="68"><b>怎 怎麼可能</b></font>
+
+166
+00:08:45,700 --> 00:08:47,370
+<font face="FZZhunYuan-M02" size="68"><b>我的火焰球</b></font>
+
+167
+00:08:47,460 --> 00:08:48,620
+<font face="FZZhunYuan-M02" size="68"><b>這得是多硬的毛啊</b></font>
+
+168
+00:08:49,040 --> 00:08:51,030
+<font face="FZZhunYuan-M02" size="68"><b>你們剛剛幹什麼了嗎</b></font>
+
+169
+00:08:51,710 --> 00:08:55,870
+<font face="FZZhunYuan-M02" size="68"><b>我還以為我要涼了呢 擬態好厲害</b></font>
+
+170
+00:08:57,720 --> 00:08:59,050
+<font face="FZZhunYuan-M02" size="68"><b>輪到我的回合了啊</b></font>
+
+171
+00:09:01,970 --> 00:09:13,810
+<font face="FZZhunYuan-M02" size="68"><b>哇～～～～～～～φ(*ˉ0ˉ)</b></font>
+
+172
+00:09:17,740 --> 00:09:19,230
+<font face="FZZhunYuan-M02" size="68"><b>啊 慘了</b></font>
+
+173
+00:09:20,320 --> 00:09:22,060
+<font face="FZZhunYuan-M02" size="68"><b>報告威壓結果</b></font>
+
+174
+00:09:23,330 --> 00:09:24,660
+<font face="FZZhunYuan-M02" size="68"><b>16人逃走</b></font>
+
+175
+00:09:25,410 --> 00:09:27,150
+<font face="FZZhunYuan-M02" size="68"><b>68人錯亂</b></font>
+
+176
+00:09:27,750 --> 00:09:29,330
+<font face="FZZhunYuan-M02" size="68"><b>92人失去意識</b></font>
+
+177
+00:09:29,920 --> 00:09:31,330
+<font face="FZZhunYuan-M02" size="68"><b>34人失禁</b></font>
+
+178
+00:09:31,420 --> 00:09:33,830
+<font face="FZZhunYuan-M02" size="68"><b>不用報告受害情況了</b></font>
+
+179
+00:09:36,090 --> 00:09:37,830
+<font face="FZZhunYuan-M02" size="68"><b>那邊那個傢伙!</b></font>
+
+180
+00:09:39,670 --> 00:09:39,920
+<font face="FZZhunYuan-M02" size="68"><b>啊?</b></font>
+
+181
+00:09:42,680 --> 00:09:43,430
+<font face="FZZhunYuan-M02" size="68"><b>史萊姆?</b></font>
+
+182
+00:09:43,930 --> 00:09:44,510
+<font face="FZZhunYuan-M02" size="68"><b>(—ω＜)</b></font>
+
+183
+00:09:50,600 --> 00:09:52,180
+<font face="FZZhunYuan-M02" size="68"><b>怎麼帶路的啊</b></font>
+
+184
+00:09:52,190 --> 00:09:53,020
+<font face="FZZhunYuan-M02" size="68"><b>這傢伙</b></font>
+
+185
+00:09:53,690 --> 00:09:56,020
+<font face="FZZhunYuan-M02" size="68"><b>話說他這種時候都睡得這麼香 心真大啊</b></font>
+
+186
+00:09:56,860 --> 00:09:57,270
+<font face="FZZhunYuan-M02" size="68"><b>所以說?</b></font>
+
+187
+00:09:57,530 --> 00:09:58,270
+<font face="FZZhunYuan-M02" size="68"><b>是</b></font>
+
+188
+00:09:59,030 --> 00:10:00,770
+<font face="FZZhunYuan-M02" size="68"><b>但是 就這些了</b></font>
+
+189
+00:09:59,240 --> 00:10:02,490
+<font face="FZZhunYuan-M02" size="68"><b><font size="60">警衛隊隊長 凱多</font></b></font>
+
+190
+00:10:03,620 --> 00:10:07,530
+<font face="FZZhunYuan-M02" size="68"><b>大概是把史萊姆和哥布林當成絕佳的獵物了吧</b></font>
+
+191
+00:10:07,950 --> 00:10:10,370
+<font face="FZZhunYuan-M02" size="68"><b>我只是想把他們趕走而已</b></font>
+
+192
+00:10:10,790 --> 00:10:13,530
+<font face="FZZhunYuan-M02" size="68"><b>給你們添麻煩了 非常抱歉</b></font>
+
+193
+00:10:14,040 --> 00:10:17,460
+<font face="FZZhunYuan-M02" size="68"><b>嘛 和目擊者的證言基本一致</b></font>
+
+194
+00:10:17,800 --> 00:10:19,040
+<font face="FZZhunYuan-M02" size="68"><b>這回你們就</b></font>
+
+195
+00:10:19,210 --> 00:10:20,620
+<font face="FZZhunYuan-M02" size="68"><b>隊長 不好了</b></font>
+
+196
+00:10:22,050 --> 00:10:23,880
+<font face="FZZhunYuan-M02" size="68"><b>礦山裡出現了盔甲龍</b></font>
+
+197
+00:10:24,050 --> 00:10:25,550
+<font face="FZZhunYuan-M02" size="68"><b>你說什麼? 討伐隊呢</b></font>
+
+198
+00:10:25,720 --> 00:10:26,800
+<font face="FZZhunYuan-M02" size="68"><b>已經過去了</b></font>
+
+199
+00:10:27,140 --> 00:10:31,300
+<font face="FZZhunYuan-M02" size="68"><b>而且 為了採礦而深入礦山的迦盧姆他們也受了重傷</b></font>
+
+200
+00:10:31,560 --> 00:10:32,640
+<font face="FZZhunYuan-M02" size="68"><b>回復藥呢?</b></font>
+
+201
+00:10:32,890 --> 00:10:35,890
+<font face="FZZhunYuan-M02" size="68"><b>這個 聽說因為要作戰爭準備所以數量不足</b></font>
+
+202
+00:10:36,730 --> 00:10:39,560
+<font face="FZZhunYuan-M02" size="68"><b>那些傢伙就像我的親兄弟一樣</b></font>
+
+203
+00:10:39,990 --> 00:10:41,900
+<font face="FZZhunYuan-M02" size="68"><b>總之先去找回復藥</b></font>
+
+204
+00:10:42,070 --> 00:10:42,570
+<font face="FZZhunYuan-M02" size="68"><b>老爺</b></font>
+
+205
+00:10:42,820 --> 00:10:44,230
+<font face="FZZhunYuan-M02" size="68"><b>無論如何也要找到一些</b></font>
+
+206
+00:10:44,410 --> 00:10:45,150
+<font face="FZZhunYuan-M02" size="68"><b>老爺</b></font>
+
+207
+00:10:47,830 --> 00:10:49,740
+<font face="FZZhunYuan-M02" size="68"><b>你怎麼擅自出來了</b></font>
+
+208
+00:10:50,660 --> 00:10:52,150
+<font face="FZZhunYuan-M02" size="68"><b>現在不是說這個的時候吧</b></font>
+
+209
+00:10:53,920 --> 00:10:55,500
+<font face="FZZhunYuan-M02" size="68"><b>你應該需要這個吧</b></font>
+
+210
+00:10:57,250 --> 00:10:58,000
+<font face="FZZhunYuan-M02" size="68"><b>這個是</b></font>
+
+211
+00:10:58,170 --> 00:10:59,420
+<font face="FZZhunYuan-M02" size="68"><b>回復藥</b></font>
+
+212
+00:10:59,500 --> 00:11:02,170
+<font face="FZZhunYuan-M02" size="68"><b>可以塗抹也可以口服的好東西哦</b></font>
+
+213
+00:11:05,180 --> 00:11:07,090
+<font face="FZZhunYuan-M02" size="68"><b>總之先試試如何</b></font>
+
+214
+00:11:10,520 --> 00:11:13,430
+<font face="FZZhunYuan-M02" size="68"><b>隊長 你要相信魔物的話嗎</b></font>
+
+215
+00:11:13,770 --> 00:11:14,850
+<font face="FZZhunYuan-M02" size="68"><b>沒時間了</b></font>
+
+216
+00:11:18,190 --> 00:11:18,850
+<font face="FZZhunYuan-M02" size="68"><b>走吧</b></font>
+
+217
+00:11:19,440 --> 00:11:20,180
+<font face="FZZhunYuan-M02" size="68"><b>是 凱多隊長!</b></font>
+
+218
+00:11:20,440 --> 00:11:22,600
+<font face="FZZhunYuan-M02" size="68"><b>你好好待在牢籠裡去</b></font>
+
+219
+00:11:28,030 --> 00:11:30,120
+<font face="FZZhunYuan-M02" size="68"><b>那麼擔心部下</b></font>
+
+220
+00:11:31,950 --> 00:11:33,280
+<font face="FZZhunYuan-M02" size="68"><b>看起來是個好人</b></font>
+
+221
+00:11:40,720 --> 00:11:42,260
+<font face="FZZhunYuan-M02" size="68"><b><font size="90">{\an5}</font></b>技能</font>
+
+222
+00:11:41,210 --> 00:11:41,960
+<font face="FZZhunYuan-M02" size="68"><b>搖籃</b></font>
+
+223
+00:11:43,130 --> 00:11:43,960
+<font face="FZZhunYuan-M02" size="68"><b>鑽石</b></font>
+
+224
+00:11:43,260 --> 00:11:44,640
+<font face="FZZhunYuan-M02" size="68"><b><font size="90">{\an5}</font></b>並不是</font>
+
+225
+00:11:44,880 --> 00:11:45,540
+<font face="FZZhunYuan-M02" size="68"><b>鼓</b></font>
+
+226
+00:11:45,390 --> 00:11:46,890
+<font face="FZZhunYuan-M02" size="68"><b><font size="90">{\an5}</font></b>消磨時間</font>
+
+227
+00:11:46,220 --> 00:11:46,550
+<font face="FZZhunYuan-M02" size="68"><b>船</b></font>
+
+228
+00:11:47,050 --> 00:11:48,210
+<font face="FZZhunYuan-M02" size="68"><b>然後是</b></font>
+
+229
+00:11:48,970 --> 00:11:50,630
+<font face="FZZhunYuan-M02" size="68"><b>東京塔</b></font>
+
+230
+00:11:54,810 --> 00:11:57,320
+<font face="FZZhunYuan-M02" size="68"><b><font size="90">{\an5}</font></b>消磨時間</font>
+
+231
+00:11:57,980 --> 00:12:00,890
+<font face="FZZhunYuan-M02" size="68"><b>話說 這傢伙真的好能睡啊</b></font>
+
+232
+00:11:58,070 --> 00:12:01,070
+<font face="FZZhunYuan-M02" size="68"><b><font size="90">{\an5}</font></b>不對 是懲罰中</font>
+
+233
+00:12:06,400 --> 00:12:08,070
+<font face="FZZhunYuan-M02" size="68"><b>幫大忙了 非常感謝</b></font>
+
+234
+00:12:08,910 --> 00:12:11,650
+<font face="FZZhunYuan-M02" size="68"><b>聽說是你給的藥 非常感謝</b></font>
+
+235
+00:12:12,410 --> 00:12:16,740
+<font face="FZZhunYuan-M02" size="68"><b>我的手差點斷了 還以為就算活下來也要丟工作了</b></font>
+
+236
+00:12:17,080 --> 00:12:17,910
+<font face="FZZhunYuan-M02" size="68"><b>非常感謝</b></font>
+
+237
+00:12:18,000 --> 00:12:18,660
+<font face="FZZhunYuan-M02" size="68"><b>不用客氣</b></font>
+
+238
+00:12:22,090 --> 00:12:22,920
+<font face="FZZhunYuan-M02" size="68"><b>你倒是說些什麼啊</b></font>
+
+239
+00:12:23,170 --> 00:12:24,250
+<font face="FZZhunYuan-M02" size="68"><b>真的非常感謝</b></font>
+
+240
+00:12:24,670 --> 00:12:25,750
+<font face="FZZhunYuan-M02" size="68"><b>欠你個人情</b></font>
+
+241
+00:12:29,930 --> 00:12:30,840
+<font face="FZZhunYuan-M02" size="68"><b>釋放嗎</b></font>
+
+242
+00:12:31,600 --> 00:12:32,760
+<font face="FZZhunYuan-M02" size="68"><b>當然</b></font>
+
+243
+00:12:33,850 --> 00:12:37,760
+<font face="FZZhunYuan-M02" size="68"><b>話說回來 那麼厲害的藥我還是第一次見</b></font>
+
+244
+00:12:38,350 --> 00:12:42,350
+<font face="FZZhunYuan-M02" size="68"><b>算不上什麼謝禮 有什麼我能幫忙的儘管說吧</b></font>
+
+245
+00:12:43,360 --> 00:12:44,190
+<font face="FZZhunYuan-M02" size="68"><b>那麼</b></font>
+
+246
+00:12:47,950 --> 00:12:50,280
+<font face="FZZhunYuan-M02" size="68"><b>原來如此 如果是這樣的話</b></font>
+
+247
+00:12:50,450 --> 00:12:52,530
+<font face="FZZhunYuan-M02" size="68"><b>我來幫你介紹個手藝好的鍛造師吧</b></font>
+
+248
+00:12:53,030 --> 00:12:54,370
+<font face="FZZhunYuan-M02" size="68"><b>那可真是幫大忙了</b></font>
+
+249
+00:12:54,620 --> 00:12:57,280
+<font face="FZZhunYuan-M02" size="68"><b>不用道謝 包在我身上吧</b></font>
+
+250
+00:13:01,110 --> 00:13:02,050
+<font face="FZZhunYuan-M02" size="68"><b>歡迎光臨</b></font>
+
+251
+00:13:04,460 --> 00:13:06,450
+<font face="FZZhunYuan-M02" size="68"><b>不愧是矮人國</b></font>
+
+252
+00:13:06,970 --> 00:13:09,880
+<font face="FZZhunYuan-M02" size="68"><b>和哥布林的村子比起來文明程度高多了</b></font>
+
+253
+00:13:10,970 --> 00:13:11,550
+<font face="FZZhunYuan-M02" size="68"><b>這邊</b></font>
+
+254
+00:13:13,810 --> 00:13:15,050
+<font face="FZZhunYuan-M02" size="68"><b>小心別迷路了</b></font>
+
+255
+00:13:17,890 --> 00:13:21,980
+<font face="FZZhunYuan-M02" size="68"><b>好厲害 那個花紋好精細啊</b></font>
+
+256
+00:13:23,310 --> 00:13:26,310
+<font face="FZZhunYuan-M02" size="68"><b>那把劍是怎麼回事 發著淡淡的光</b></font>
+
+257
+00:13:26,820 --> 00:13:27,730
+<font face="FZZhunYuan-M02" size="68"><b>是魔力嗎</b></font>
+
+258
+00:13:28,240 --> 00:13:31,320
+<font face="FZZhunYuan-M02" size="68"><b>那個啊 那個就是他製作的</b></font>
+
+259
+00:13:32,410 --> 00:13:33,990
+<font face="FZZhunYuan-M02" size="68"><b>我們接下來要去見的鍛造師</b></font>
+
+260
+00:13:39,830 --> 00:13:42,160
+<font face="FZZhunYuan-M02" size="68"><b>就是這了 他的手藝可好了</b></font>
+
+261
+00:13:42,830 --> 00:13:44,920
+<font face="FZZhunYuan-M02" size="68"><b>喂 大哥 在嗎</b></font>
+
+262
+00:13:45,250 --> 00:13:45,910
+<font face="FZZhunYuan-M02" size="68"><b>大哥</b></font>
+
+263
+00:13:49,590 --> 00:13:51,580
+<font face="FZZhunYuan-M02" size="68"><b>凱多嗎 稍微等我一會</b></font>
+
+264
+00:13:53,090 --> 00:13:54,430
+<font face="FZZhunYuan-M02" size="68"><b>打擾了</b></font>
+
+265
+00:13:54,600 --> 00:13:56,840
+<font face="FZZhunYuan-M02" size="68"><b>這是凱金 我的大哥</b></font>
+
+266
+00:13:56,730 --> 00:14:00,860
+<font face="FZZhunYuan-M02" size="68"><b><font size="60">武器鍛造工匠 凱金</font></b></font>
+
+267
+00:13:58,430 --> 00:14:00,590
+<font face="FZZhunYuan-M02" size="68"><b>百褶不撓的匠人神態</b></font>
+
+268
+00:14:11,030 --> 00:14:14,110
+<font face="FZZhunYuan-M02" size="68"><b>史萊姆 你們認識嗎</b></font>
+
+269
+00:14:14,620 --> 00:14:16,860
+<font face="FZZhunYuan-M02" size="68"><b>凱金先生 就是這隻史萊姆呀</b></font>
+
+270
+00:14:14,660 --> 00:14:19,170
+<font face="FZZhunYuan-M02" size="68"><b>{\an5}矮人三兄弟</b></font>
+
+271
+00:14:14,660 --> 00:14:19,170
+<font face="FZZhunYuan-M02" size="68"><b>{\an5}次男 多爾德     三男 米魯德     長子 葛洛姆</b></font>
+
+272
+00:14:17,200 --> 00:14:20,290
+<font face="FZZhunYuan-M02" size="68"><b>昨天救了我們</b></font>
+
+273
+00:14:21,870 --> 00:14:23,360
+<font face="FZZhunYuan-M02" size="68"><b>是這樣啊</b></font>
+
+274
+00:14:26,040 --> 00:14:27,630
+<font face="FZZhunYuan-M02" size="68"><b>非常感謝</b></font>
+
+275
+00:14:29,880 --> 00:14:34,550
+<font face="FZZhunYuan-M02" size="68"><b>沒有沒有 沒這麼偉大又好像挺偉大的嘿嘿嘿</b></font>
+
+276
+00:14:35,220 --> 00:14:37,380
+<font face="FZZhunYuan-M02" size="68"><b>然後 有何貴幹呢</b></font>
+
+277
+00:14:40,140 --> 00:14:42,630
+<font face="FZZhunYuan-M02" size="68"><b>原來如此 事情大概知道了</b></font>
+
+278
+00:14:43,390 --> 00:14:46,230
+<font face="FZZhunYuan-M02" size="68"><b>但是對不起了 我現在正忙得慌</b></font>
+
+279
+00:14:46,980 --> 00:14:50,310
+<font face="FZZhunYuan-M02" size="68"><b>某個笨蛋大臣 給了個亂來的訂單</b></font>
+
+280
+00:14:50,820 --> 00:14:52,060
+<font face="FZZhunYuan-M02" size="68"><b>亂來的訂單?</b></font>
+
+281
+00:14:52,900 --> 00:14:58,570
+<font face="FZZhunYuan-M02" size="68"><b>說是可能要發生戰爭 讓我這週內做完20把長劍</b></font>
+
+282
+00:14:59,410 --> 00:15:02,740
+<font face="FZZhunYuan-M02" size="68"><b>我才剛做出一把長劍 材料就用完了</b></font>
+
+283
+00:15:03,580 --> 00:15:06,570
+<font face="FZZhunYuan-M02" size="68"><b>那就說做不到 拒絕掉不就好了嗎</b></font>
+
+284
+00:15:07,000 --> 00:15:07,750
+<font face="FZZhunYuan-M02" size="68"><b>是啊</b></font>
+
+285
+00:15:08,000 --> 00:15:12,500
+<font face="FZZhunYuan-M02" size="68"><b>蠢貨 我一開始也說了做不到了</b></font>
+
+286
+00:15:12,840 --> 00:15:15,420
+<font face="FZZhunYuan-M02" size="68"><b>然後那個混蛋培斯塔大臣</b></font>
+
+287
+00:15:16,180 --> 00:15:17,260
+<font face="FZZhunYuan-M02" size="68"><b>哦呀哦呀</b></font>
+
+288
+00:15:16,600 --> 00:15:21,650
+<font face="FZZhunYuan-M02" size="68"><b><font size="60">{\an4}培斯塔大臣</font></b></font>
+
+289
+00:15:17,510 --> 00:15:21,600
+<font face="FZZhunYuan-M02" size="68"><b>沒想到聞名王國的鍛造師凱金大人</b></font>
+
+290
+00:15:21,600 --> 00:15:24,430
+<font face="FZZhunYuan-M02" size="68"><b>連這點程度的工作都完成不了嗎</b></font>
+
+291
+00:15:24,690 --> 00:15:28,850
+<font face="FZZhunYuan-M02" size="68"><b>我能允許他這樣胡說八道嗎 那個混蛋</b></font>
+
+292
+00:15:29,610 --> 00:15:31,770
+<font face="FZZhunYuan-M02" size="68"><b>部長也是這樣的感覺呢</b></font>
+
+293
+00:15:32,360 --> 00:15:35,690
+<font face="FZZhunYuan-M02" size="68"><b>不管哪個世界 人際關係都很麻煩呢</b></font>
+
+294
+00:15:36,530 --> 00:15:37,860
+<font face="FZZhunYuan-M02" size="68"><b>你說材料不夠了是嗎</b></font>
+
+295
+00:15:38,370 --> 00:15:42,530
+<font face="FZZhunYuan-M02" size="68"><b>是的 需要一種叫做魔礦石的特殊礦石</b></font>
+
+296
+00:15:42,870 --> 00:15:45,200
+<font face="FZZhunYuan-M02" size="68"><b>雖然昨天我們去挖了</b></font>
+
+297
+00:15:45,710 --> 00:15:47,700
+<font face="FZZhunYuan-M02" size="68"><b>但是盔甲龍突然出現了</b></font>
+
+298
+00:15:48,790 --> 00:15:49,540
+<font face="FZZhunYuan-M02" size="68"><b>這樣啊</b></font>
+
+299
+00:15:50,040 --> 00:15:53,460
+<font face="FZZhunYuan-M02" size="68"><b>不過那個礦山也差不多被挖空了</b></font>
+
+300
+00:15:53,880 --> 00:15:55,460
+<font face="FZZhunYuan-M02" size="68"><b>大概已經沒有了</b></font>
+
+301
+00:15:56,890 --> 00:16:03,470
+<font face="FZZhunYuan-M02" size="68"><b>然而就算材料夠了 20把劍起碼也要兩週左右</b></font>
+
+302
+00:16:05,640 --> 00:16:09,230
+<font face="FZZhunYuan-M02" size="68"><b>現在卻只剩下五天就要送貨到王那邊</b></font>
+
+303
+00:16:09,730 --> 00:16:13,900
+<font face="FZZhunYuan-M02" size="68"><b>而且這是國家分配給各個匠人的工作</b></font>
+
+304
+00:16:14,150 --> 00:16:17,140
+<font face="FZZhunYuan-M02" size="68"><b>如果沒完成可能要被剝奪匠人的資格</b></font>
+
+305
+00:16:17,570 --> 00:16:18,320
+<font face="FZZhunYuan-M02" size="68"><b>大哥</b></font>
+
+306
+00:16:18,990 --> 00:16:20,570
+<font face="FZZhunYuan-M02" size="68"><b>還真是讓人困惱呢</b></font>
+
+307
+00:16:22,160 --> 00:16:27,080
+<font face="FZZhunYuan-M02" size="68"><b>啊嘞 我不是有魔礦石嗎</b></font>
+
+308
+00:16:35,420 --> 00:16:36,660
+<font face="FZZhunYuan-M02" size="68"><b>老闆</b></font>
+
+309
+00:16:40,430 --> 00:16:42,170
+<font face="FZZhunYuan-M02" size="68"><b>這個能用嗎</b></font>
+
+310
+00:16:49,520 --> 00:16:54,110
+<font face="FZZhunYuan-M02" size="68"><b>這不是魔礦石嗎 而且還是難以置信般的高純度</b></font>
+
+311
+00:16:56,950 --> 00:17:00,190
+<font face="FZZhunYuan-M02" size="68"><b>喂喂老闆 你的眼睛是窟窿嗎</b></font>
+
+312
+00:17:03,950 --> 00:17:09,120
+<font face="FZZhunYuan-M02" size="68"><b>哇 這是已經加工好的魔礦塊而不是魔礦石</b></font>
+
+313
+00:17:08,380 --> 00:17:10,590
+<font face="FZZhunYuan-M02" size="68"><b><font size="60">魔礦塊</font></b></font>
+
+314
+00:17:09,870 --> 00:17:10,450
+<font face="FZZhunYuan-M02" size="68"><b>正解</b></font>
+
+315
+00:17:10,960 --> 00:17:13,620
+<font face="FZZhunYuan-M02" size="68"><b>這樣的話甚至可以做出更高品質的劍</b></font>
+
+316
+00:17:13,880 --> 00:17:16,960
+<font face="FZZhunYuan-M02" size="68"><b>怎麼會這樣 這一大整塊</b></font>
+
+317
+00:17:18,130 --> 00:17:22,550
+<font face="FZZhunYuan-M02" size="68"><b>這能讓給我嗎 當然我會給個好價錢的</b></font>
+
+318
+00:17:22,800 --> 00:17:25,640
+<font face="FZZhunYuan-M02" size="68"><b>該怎麼辦好呢</b></font>
+
+319
+00:17:26,720 --> 00:17:29,890
+<font face="FZZhunYuan-M02" size="68"><b>你想要什麼 只要是我能做得到的什麼都行</b></font>
+
+320
+00:17:30,730 --> 00:17:32,810
+<font face="FZZhunYuan-M02" size="68"><b>就等著你這句話呢</b></font>
+
+321
+00:17:43,660 --> 00:17:45,320
+<font face="FZZhunYuan-M02" size="68"><b>希望能找個老闆的熟人</b></font>
+
+322
+00:17:45,490 --> 00:17:49,080
+<font face="FZZhunYuan-M02" size="68"><b>願意作為技術顧問來我們村子的</b></font>
+
+323
+00:17:52,080 --> 00:17:53,660
+<font face="FZZhunYuan-M02" size="68"><b>只要這樣就行了嘛</b></font>
+
+324
+00:17:54,340 --> 00:17:58,330
+<font face="FZZhunYuan-M02" size="68"><b>對我們來說最優先的就是衣食住的衣和住</b></font>
+
+325
+00:17:58,840 --> 00:18:02,750
+<font face="FZZhunYuan-M02" size="68"><b>今後的衣服籌備和武器之類的也想要拜託你</b></font>
+
+326
+00:18:05,010 --> 00:18:07,680
+<font face="FZZhunYuan-M02" size="68"><b>哼 小事一樁</b></font>
+
+327
+00:18:08,430 --> 00:18:12,100
+<font face="FZZhunYuan-M02" size="68"><b>但是 就算現在開始做劍也…</b></font>
+
+328
+00:18:14,020 --> 00:18:15,010
+<font face="FZZhunYuan-M02" size="68"><b>來得及嗎</b></font>
+
+329
+00:18:15,690 --> 00:18:18,430
+<font face="FZZhunYuan-M02" size="68"><b>嘛 只能做多少是多少了</b></font>
+
+330
+00:18:18,780 --> 00:18:20,610
+<font face="FZZhunYuan-M02" size="68"><b>準備開工了</b></font>
+
+331
+00:18:25,030 --> 00:18:27,780
+<font face="FZZhunYuan-M02" size="68"><b>對了 大賢者 能打擾一下嘛</b></font>
+
+332
+00:18:28,540 --> 00:18:28,770
+<font face="FZZhunYuan-M02" size="68"><b>好的</b></font>
+
+333
+00:18:31,370 --> 00:18:32,450
+<font face="FZZhunYuan-M02" size="68"><b>吶 老闆</b></font>
+
+334
+00:18:33,540 --> 00:18:36,950
+<font face="FZZhunYuan-M02" size="68"><b>把剛才說做好的那把劍給我看看</b></font>
+
+335
+00:18:42,050 --> 00:18:43,460
+<font face="FZZhunYuan-M02" size="68"><b>這真是厲害啊</b></font>
+
+336
+00:18:43,970 --> 00:18:47,630
+<font face="FZZhunYuan-M02" size="68"><b>就連門外漢的我都能看得出老闆的手藝是貨真價實的</b></font>
+
+337
+00:18:48,970 --> 00:18:50,470
+<font face="FZZhunYuan-M02" size="68"><b>這把劍看起來也發著光呢</b></font>
+
+338
+00:18:51,310 --> 00:18:53,720
+<font face="FZZhunYuan-M02" size="68"><b>因為用魔鋼做了核心</b></font>
+
+339
+00:18:55,400 --> 00:19:00,480
+<font face="FZZhunYuan-M02" size="68"><b>簡單來說就是能跟著使用者的想像成長的劍</b></font>
+
+340
+00:19:00,570 --> 00:19:02,210
+<font face="FZZhunYuan-M02" size="68"><b>真厲害</b></font>
+
+341
+00:19:02,410 --> 00:19:06,150
+<font face="FZZhunYuan-M02" size="68"><b>真厲害呢 不知道這位老闆能來我們村子裡嗎</b></font>
+
+342
+00:19:06,410 --> 00:19:08,400
+<font face="FZZhunYuan-M02" size="68"><b>為此</b></font>
+
+343
+00:19:08,830 --> 00:19:10,080
+<font face="FZZhunYuan-M02" size="68"><b>這把劍借我一下</b></font>
+
+344
+00:19:13,660 --> 00:19:15,250
+<font face="FZZhunYuan-M02" size="68"><b>劍被 什麼</b></font>
+
+345
+00:19:18,170 --> 00:19:19,160
+<font face="FZZhunYuan-M02" size="68"><b>利姆路老爺</b></font>
+
+346
+00:19:19,750 --> 00:19:22,590
+<font face="FZZhunYuan-M02" size="68"><b>稍微等等 大賢者解析一下</b></font>
+
+347
+00:19:23,260 --> 00:19:25,510
+<font face="FZZhunYuan-M02" size="68"><b>解析對象 長劍</b></font>
+
+348
+00:19:26,590 --> 00:19:27,500
+<font face="FZZhunYuan-M02" size="68"><b>成功</b></font>
+
+349
+00:19:28,260 --> 00:19:30,920
+<font face="FZZhunYuan-M02" size="68"><b>使用魔礦塊進行複製</b></font>
+
+350
+00:19:31,520 --> 00:19:35,010
+<font face="FZZhunYuan-M02" size="68"><b>製作複製品 成功</b></font>
+
+351
+00:19:46,950 --> 00:19:50,440
+<font face="FZZhunYuan-M02" size="68"><b>魔礦塊的長劍 20把完成</b></font>
+
+352
+00:19:55,790 --> 00:19:56,450
+<font face="FZZhunYuan-M02" size="68"><b>慶祝?</b></font>
+
+353
+00:19:57,540 --> 00:20:00,120
+<font face="FZZhunYuan-M02" size="68"><b>多虧了你的幫忙 納品順利搞定了</b></font>
+
+354
+00:20:00,460 --> 00:20:02,450
+<font face="FZZhunYuan-M02" size="68"><b>沒必要特地慶祝啦</b></font>
+
+355
+00:20:02,800 --> 00:20:06,380
+<font face="FZZhunYuan-M02" size="68"><b>嘛嘛 有很多漂亮的精靈小姐姐哦</b></font>
+
+356
+00:20:06,380 --> 00:20:06,960
+<font face="FZZhunYuan-M02" size="68"><b>精靈</b></font>
+
+357
+00:20:07,390 --> 00:20:09,800
+<font face="FZZhunYuan-M02" size="68"><b>沒錯沒錯 有一家叫做夜之蝶的店</b></font>
+
+358
+00:20:09,890 --> 00:20:13,970
+<font face="FZZhunYuan-M02" size="68"><b>從少女到熟女應有盡有 紳士的不二之選</b></font>
+
+359
+00:20:14,060 --> 00:20:15,020
+<font face="FZZhunYuan-M02" size="68"><b>蝶…</b></font>
+
+360
+00:20:15,560 --> 00:20:16,390
+<font face="FZZhunYuan-M02" size="68"><b>倒是說話啊</b></font>
+
+361
+00:20:17,650 --> 00:20:20,140
+<font face="FZZhunYuan-M02" size="68"><b>要是利姆路老爺不來的話 慶祝會可就開不起來了</b></font>
+
+362
+00:20:20,230 --> 00:20:20,720
+<font face="FZZhunYuan-M02" size="68"><b>沒錯沒錯</b></font>
+
+363
+00:20:21,320 --> 00:20:24,150
+<font face="FZZhunYuan-M02" size="68"><b>嘛 都說到這個地步的話 真拿你們沒辦法</b></font>
+
+364
+00:20:27,160 --> 00:20:31,150
+<font face="FZZhunYuan-M02" size="68"><b>真是一群讓人困擾的傢伙們呢</b></font>
+
+365
+00:20:38,080 --> 00:20:40,570
+<font face="FZZhunYuan-M02" size="68"><b>啊啦 凱金先生歡迎光臨</b></font>
+
+366
+00:20:40,920 --> 00:20:42,580
+<font face="FZZhunYuan-M02" size="68"><b>歡迎光臨</b></font>
+
+367
+00:20:45,170 --> 00:20:45,660
+<font face="FZZhunYuan-M02" size="68"><b>精靈</b></font>
+
+368
+00:20:47,180 --> 00:20:47,760
+<font face="FZZhunYuan-M02" size="68"><b>精靈</b></font>
+
+369
+00:20:49,180 --> 00:20:51,850
+<font face="FZZhunYuan-M02" size="68"><b>色靈 不對 精靈</b></font>
+
+370
+00:20:52,680 --> 00:20:54,670
+<font face="FZZhunYuan-M02" size="68"><b>哇 好可愛</b></font>
+
+371
+00:20:55,930 --> 00:20:57,590
+<font face="FZZhunYuan-M02" size="68"><b>來了</b></font>
+
+372
+00:20:58,850 --> 00:21:01,600
+<font face="FZZhunYuan-M02" size="68"><b>喂 明明是我先看上的</b></font>
+
+373
+00:21:01,940 --> 00:21:04,600
+<font face="FZZhunYuan-M02" size="68"><b>糟糕 衣服好薄啊</b></font>
+
+374
+00:21:04,690 --> 00:21:06,930
+<font face="FZZhunYuan-M02" size="68"><b>一彈一彈真舒服</b></font>
+
+375
+00:21:07,280 --> 00:21:09,440
+<font face="FZZhunYuan-M02" size="68"><b>舒服的是我這裡</b></font>
+
+376
+00:21:12,280 --> 00:21:15,450
+<font face="FZZhunYuan-M02" size="68"><b>這就是女性胸部的觸感</b></font>
+
+377
+00:21:16,120 --> 00:21:20,280
+<font face="FZZhunYuan-M02" size="68"><b>人生第一次 這就是樂園嗎</b></font>
+
+378
+00:21:20,710 --> 00:21:24,870
+<font face="FZZhunYuan-M02" size="68"><b>嘴上不願意 身體還是很誠實的嘛</b></font>
+
+379
+00:21:26,550 --> 00:21:27,960
+<font face="FZZhunYuan-M02" size="68"><b>也沒那麼…</b></font>
+
+380
+00:21:34,310 --> 00:21:36,050
+<font face="FZZhunYuan-M02" size="68"><b>來喝起來吧</b></font>
+
+381
+00:21:36,310 --> 00:21:37,640
+<font face="FZZhunYuan-M02" size="68"><b>好的</b></font>
+
+382
+00:21:39,730 --> 00:21:42,470
+<font face="FZZhunYuan-M02" size="68"><b>這時的我彷彿置身於天堂之中</b></font>
+
+383
+00:21:43,980 --> 00:21:46,640
+<font face="FZZhunYuan-M02" size="68"><b>想就這樣一直生活在這雙峰之間</b></font>
+
+384
+00:21:48,900 --> 00:21:52,070
+<font face="FZZhunYuan-M02" size="68"><b>這是何等美妙的雙峰人生啊</b></font>
+
+385
+00:21:54,410 --> 00:21:58,070
+<font face="FZZhunYuan-M02" size="68"><b>但是快樂的時間無法持續太久</b></font>
+
+386
+00:21:59,410 --> 00:22:01,830
+<font face="FZZhunYuan-M02" size="68"><b>這也是 人生</b></font>
+
+387
+00:22:17,250 --> 00:22:22,340
+<font face="FZZhunYuan-M02" size="68"><b>為什麼 只持有唯一的希望</b></font>
+
+388
+00:22:17,250 --> 00:22:22,340
+<font face="FZZhunYuan-M02" size="68"><b>どうして　希望を持つひとだけ</b></font>
+
+389
+00:22:22,820 --> 00:22:28,020
+<font face="FZZhunYuan-M02" size="68"><b>內心只知道絕望</b></font>
+
+390
+00:22:22,820 --> 00:22:28,020
+<font face="FZZhunYuan-M02" size="68"><b>心に　絶望を知るのだろう</b></font>
+
+391
+00:22:28,610 --> 00:22:33,530
+<font face="FZZhunYuan-M02" size="68"><b>為什麼 只持有唯一的勇氣</b></font>
+
+392
+00:22:28,610 --> 00:22:33,530
+<font face="FZZhunYuan-M02" size="68"><b>どうして　勇気を持つひとだけ</b></font>
+
+393
+00:22:33,530 --> 00:22:38,870
+<font face="FZZhunYuan-M02" size="68"><b>名譽的盡頭 只是傷痕累累</b></font>
+
+394
+00:22:33,530 --> 00:22:38,870
+<font face="FZZhunYuan-M02" size="68"><b>名誉の果てに　傷を負うのだろう</b></font>
+
+395
+00:22:39,370 --> 00:22:44,970
+<font face="FZZhunYuan-M02" size="68"><b>對於悲傷的事物 不願低頭面對</b></font>
+
+396
+00:22:39,370 --> 00:22:44,970
+<font face="FZZhunYuan-M02" size="68"><b>悲しい出来事に　目を伏せたくなくて</b></font>
+
+397
+00:22:45,000 --> 00:22:50,500
+<font face="FZZhunYuan-M02" size="68"><b>全新的黎明 被稱為夢想之物</b></font>
+
+398
+00:22:45,000 --> 00:22:50,500
+<font face="FZZhunYuan-M02" size="68"><b>新しい夜明けを　夢と名付けてみせた</b></font>
+
+399
+00:22:50,650 --> 00:22:56,350
+<font face="FZZhunYuan-M02" size="68"><b>扭曲的夜晚之間 降下了光明</b></font>
+
+400
+00:22:50,650 --> 00:22:56,350
+<font face="FZZhunYuan-M02" size="68"><b>ねじれた　夜の隙間に　光がおちる</b></font>
+
+401
+00:22:57,310 --> 00:23:02,810
+<font face="FZZhunYuan-M02" size="68"><b>連上天都哭泣了</b></font>
+
+402
+00:22:57,310 --> 00:23:02,810
+<font face="FZZhunYuan-M02" size="68"><b>空が泣いているよ</b></font>
+
+403
+00:23:03,310 --> 00:23:05,890
+<font face="FZZhunYuan-M02" size="68"><b>世界的盡頭</b></font>
+
+404
+00:23:03,310 --> 00:23:05,890
+<font face="FZZhunYuan-M02" size="68"><b>世界の果て</b></font>
+
+405
+00:23:05,900 --> 00:23:08,980
+<font face="FZZhunYuan-M02" size="68"><b>有什麼 雖然不知道</b></font>
+
+406
+00:23:05,900 --> 00:23:08,980
+<font face="FZZhunYuan-M02" size="68"><b>なんて　知らないけれど</b></font>
+
+407
+00:23:08,980 --> 00:23:14,650
+<font face="FZZhunYuan-M02" size="68"><b>這雙手所觸及的地方 我想守護</b></font>
+
+408
+00:23:08,980 --> 00:23:14,650
+<font face="FZZhunYuan-M02" size="68"><b>この手が届く場所は　守りたくて</b></font>
+
+409
+00:23:14,660 --> 00:23:20,900
+<font face="FZZhunYuan-M02" size="68"><b>戰鬥的理由 僅凝視唯一一點</b></font>
+
+410
+00:23:14,660 --> 00:23:20,900
+<font face="FZZhunYuan-M02" size="68"><b>戦う理由　ひとつ　睨みつけた</b></font>
+
+411
+00:23:20,910 --> 00:23:27,580
+<font face="FZZhunYuan-M02" size="68"><b>作為能夠彼此諒解的答案 我們</b></font>
+
+412
+00:23:20,910 --> 00:23:27,580
+<font face="FZZhunYuan-M02" size="68"><b>許しあうことの　答えになる　僕らは</b></font>
+
+413
+00:23:28,170 --> 00:23:32,750
+<font face="FZZhunYuan-M02" size="68"><b>絕不認輸</b></font>
+
+414
+00:23:28,170 --> 00:23:32,750
+<font face="FZZhunYuan-M02" size="68"><b>負けちゃいけない</b></font>
+
+415
+00:23:32,750 --> 00:23:32,750
+<font face="FZZhunYuan-M02" size="68"><b></b></font>
+
+416
+00:23:36,010 --> 00:23:39,850
+<font face="FZZhunYuan-M02" size="68"><b>下集 英雄王蓋札·德瓦崗</b></font>
+
+417
+00:23:39,700 --> 00:23:39,700
+<font face="FZZhunYuan-M02" size="68"><b></b></font>
+
