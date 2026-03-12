@@ -2,10 +2,9 @@
 """
 Fix ML-transcribed Mandarin subtitles using reference subtitles and an LLM.
 
-Multi-step approach:
-1. LLM identifies potential ASR errors (homophones + boundary errors)
-2. pypinyin verifies each fix (strict for homophones, relaxed for boundary errors)
-3. Reference alignment catches additional homophone substitutions
+Two-step approach:
+1. LLM identifies potential homophone errors
+2. pypinyin verifies each fix is a true homophone (same/similar pronunciation)
 """
 
 import argparse
@@ -28,28 +27,29 @@ DEFAULT_MODEL = "qwen/qwen3-235b-a22b-2507"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 SYSTEM_PROMPT = """\
-你是一名專業的繁體中文字幕校對編輯，專門修正語音識別（ASR）產生的錯誤。
+你是一名專業的繁體中文字幕校對編輯，專門修正語音識別（ASR）產生的同音字/近音字錯誤。
 
 你會收到一行ASR轉錄字幕、前後文、和附近的參考字幕（從日文翻譯而來）。
 
-你的任務是找出ASR轉錄中的錯誤，並以JSON格式回覆。
+你的任務是找出ASR轉錄中的同音字/近音字錯誤，並以JSON格式回覆。
 
-ASR錯誤類型：
-1. 同音字錯誤：ASR聽到正確發音但寫錯漢字。如「過重」→「國中」、「文化機」→「文化祭」、「離隊」→「裡蹲」、「避除」→「壁櫥」、「最根就地」→「追根究底」
-2. 音節邊界錯誤：ASR把正確的音節序列劃分成了不成詞的漢字組合。如「外月退」→「玩樂團」（wài yuè tuì ≈ wán lè tuán）、「頭開頭」→「頭蓋骨」（tóu kāi tóu ≈ tóu gài gǔ）、「糟了正」→「演奏了這」（zāo le zhèng ≈ yǎn zòu le zhè）
+什麼是同音字錯誤：ASR聽到正確的發音，但寫成了發音相同或相似的不同漢字。
+常見類型：
+1. 普通同音字：「過重」→「國中」、「文化機」→「文化祭」、「離隊」→「裡蹲」
+2. 成語/固定搭配被拆散：「最根就地」→「追根究底」（每個字都是近音字錯誤）
+3. 日常詞彙被拆散：「避除」→「壁櫥」（bìchú，完全同音）
 
-什麼不是ASR錯誤（絕對不要改）：
+什麼不是同音字錯誤（絕對不要改）：
 - 同義詞替換（辛苦→糟糕、留言→評論、回應→理睬、擺→放）
 - 措辭不同但意思相同（人氣→熱門、樂團→樂隊）
 - 語序調整、添加或刪除字詞
 
 規則：
-- 只找ASR聽錯的部分
-- 對於同音字錯誤：修正的字和原字必須讀音相同或很接近
-- 對於音節邊界錯誤：原文必須是不成詞的漢字組合，修正後應該是通順的詞語
-- 特別注意：是否有常見成語、四字格或詞語被ASR寫成了不成詞的漢字組合
+- 只找發音相同或相似但漢字寫錯的情況
+- 修正的字和原字必須讀音相同或很接近
+- 特別注意：是否有常見成語、四字格或詞語被ASR寫成了同音但不成詞的漢字組合
 - 參考字幕只用來理解這句話應該表達什麼意思
-- 如果原文沒有ASR錯誤，回覆空列表 []
+- 如果原文沒有同音字錯誤，回覆空列表 []
 - 寧可漏報也不要誤報
 - 每個修正的「wrong」和「correct」字數必須相同
 
@@ -58,10 +58,8 @@ ASR錯誤類型：
 
 正確例子：
 - 過重→國中 ✓  - 文化機→文化祭 ✓  - 離隊→裡蹲 ✓
-- 最根就地→追根究底 ✓  - 避除→壁櫥 ✓
+- 最根就地→追根究底 ✓（成語修正）  - 避除→壁櫥 ✓（同音詞）
 - 登上→等上 ✓  - 反碎→粉碎 ✓
-- 外月退→玩樂團 ✓（音節邊界）  - 頭開頭→頭蓋骨 ✓（音節邊界）
-- 糟了正→演奏了這 ✓（音節邊界）
 
 錯誤例子（不要改）：
 - 辛苦→糟糕 ✗  - 留言→評論 ✗  - 回應→理睬 ✗
@@ -406,50 +404,6 @@ def get_fixes(
     return fixes
 
 
-def similar_pinyin_str(a: str, b: str, threshold: float = 0.5) -> bool:
-    """Check if two pinyin strings are similar enough (edit distance based)."""
-    if a == b:
-        return True
-    na, nb = len(a), len(b)
-    dp = [[0] * (nb + 1) for _ in range(na + 1)]
-    for i in range(na + 1):
-        dp[i][0] = i
-    for j in range(nb + 1):
-        dp[0][j] = j
-    for i in range(1, na + 1):
-        for j in range(1, nb + 1):
-            dp[i][j] = min(
-                dp[i-1][j] + 1,
-                dp[i][j-1] + 1,
-                dp[i-1][j-1] + (0 if a[i-1] == b[j-1] else 1)
-            )
-    max_len = max(na, nb)
-    similarity = 1 - dp[na][nb] / max_len
-    return similarity >= threshold
-
-
-def is_relaxed_homophone(wrong: str, correct: str) -> bool:
-    """Relaxed homophone check for multi-char ASR boundary errors.
-
-    Compares the FULL pinyin string of wrong and correct (not char-by-char),
-    because ASR boundary errors redistribute syllable boundaries.
-    E.g., 外月退 (wai-yue-tui) ≈ 玩樂團 (wan-le-tuan) — similar overall sound
-    but very different when compared character by character.
-    """
-    if len(wrong) != len(correct):
-        return False
-    if wrong == correct:
-        return False
-    if len(wrong) < 3:
-        return False  # only relax for 3+ char fixes
-
-    # Compare concatenated pinyin strings
-    wrong_py = ''.join(lazy_pinyin(wrong, style=Style.NORMAL))
-    correct_py = ''.join(lazy_pinyin(correct, style=Style.NORMAL))
-
-    return similar_pinyin_str(wrong_py, correct_py, threshold=0.4)
-
-
 def apply_fixes(transcribed: str, fixes: list[dict]) -> str:
     result = transcribed
     for fix in fixes:
@@ -465,15 +419,10 @@ def apply_fixes(transcribed: str, fixes: list[dict]) -> str:
         if len(correct) != len(wrong):
             continue
         # Verify it's actually a homophone using pypinyin
-        # For multi-char fixes (3+), use relaxed check
-        if is_homophone(wrong, correct):
-            result = result.replace(wrong, correct, 1)
-        elif is_relaxed_homophone(wrong, correct):
-            result = result.replace(wrong, correct, 1)
-            print(f"    [relaxed accept] {wrong}→{correct}")
-        else:
+        if not is_homophone(wrong, correct):
             print(f"    [rejected] {wrong}→{correct} (pinyin mismatch)")
             continue
+        result = result.replace(wrong, correct, 1)
 
     return result
 
