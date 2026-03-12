@@ -13,6 +13,7 @@ import os
 import re
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -434,7 +435,8 @@ def main():
     parser.add_argument("--reference", "-r", required=True, help="Reference SRT file")
     parser.add_argument("--output", "-o", required=True, help="Output corrected SRT")
     parser.add_argument("--model", "-m", default=DEFAULT_MODEL, help=f"LLM model (default: {DEFAULT_MODEL})")
-    parser.add_argument("--delay", type=float, default=0.3, help="Delay between API calls (default: 0.3s)")
+    parser.add_argument("--delay", type=float, default=0.0, help="Delay between API calls (default: 0.0s)")
+    parser.add_argument("--workers", "-w", type=int, default=20, help="Number of parallel API workers (default: 20)")
     parser.add_argument("--ref-count", type=int, default=5, help="Number of reference lines per segment (default: 5)")
     args = parser.parse_args()
 
@@ -454,9 +456,10 @@ def main():
     ref_subs = clean_reference_subs(ref_subs)
     print(f"  {len(ref_subs)} segments (after cleaning)")
 
-    print(f"\nCorrecting with {args.model}...")
-    corrected_subs = []
-    for i, sub in enumerate(input_subs):
+    print(f"\nCorrecting with {args.model} ({args.workers} workers)...")
+
+    def process_sub(i: int, sub: Sub) -> tuple[int, Sub, str]:
+        """Process a single subtitle. Returns (index, corrected_sub, original_text)."""
         closest = find_refs_by_overlap(sub, ref_subs, n=args.ref_count)
         context = []
         for j in range(max(0, i - 3), min(len(input_subs), i + 4)):
@@ -479,15 +482,23 @@ def main():
             print(f"  [{i+1}/{len(input_subs)}] Error: {e} — keeping original")
             fixed = sub.text
 
-        corrected_subs.append(Sub(sub.index, sub.start_ms, sub.end_ms, fixed))
-
-        if fixed != sub.text:
-            print(f"  [{i+1}/{len(input_subs)}] {sub.text} → {fixed}")
-        else:
-            print(f"  [{i+1}/{len(input_subs)}] {sub.text} (unchanged)")
-
-        if args.delay > 0 and i < len(input_subs) - 1:
+        if args.delay > 0:
             time.sleep(args.delay)
+
+        return i, Sub(sub.index, sub.start_ms, sub.end_ms, fixed), sub.text
+
+    results = [None] * len(input_subs)
+    with ThreadPoolExecutor(max_workers=args.workers) as executor:
+        futures = {executor.submit(process_sub, i, sub): i for i, sub in enumerate(input_subs)}
+        for future in as_completed(futures):
+            i, corrected, original = future.result()
+            results[i] = corrected
+            if corrected.text != original:
+                print(f"  [{i+1}/{len(input_subs)}] {original} → {corrected.text}")
+            else:
+                print(f"  [{i+1}/{len(input_subs)}] {original} (unchanged)")
+
+    corrected_subs = results
 
     # Write output
     out_lines = []
