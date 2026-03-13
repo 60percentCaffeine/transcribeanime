@@ -344,7 +344,7 @@ def align_and_find_homophone_subs(transcribed: str, ref_text: str) -> list[tuple
             tc, rc = t[i-1], r[j-1]
             tp = t_py[i-1]
             rp = r_py[j-1]
-            if tp == rp or similar_pinyin(tp, rp):
+            if tp == rp:  # Require exact pinyin match for ref alignment (stricter = fewer false positives)
                 subs.append((tc, rc))
             i -= 1
             j -= 1
@@ -364,11 +364,17 @@ def align_and_find_homophone_subs(transcribed: str, ref_text: str) -> list[tuple
 
 def apply_ref_homophone_subs(transcribed: str, ref_subs_list: list[Sub]) -> str:
     """Apply homophone substitutions found by aligning with reference."""
+    # Common function words that should never be substituted by ref alignment
+    # These are too frequent and alignment noise causes false positives
+    PROTECTED_CHARS = set('是的了在有我他她它不這那就都也要會可以')
+
     ref_text = " ".join(r.text for r in ref_subs_list)
     subs = align_and_find_homophone_subs(transcribed, ref_text)
 
     result = transcribed
     for wrong_char, correct_char in subs:
+        if wrong_char in PROTECTED_CHARS:
+            continue
         if wrong_char in result and wrong_char != correct_char:
             result = result.replace(wrong_char, correct_char, 1)
 
@@ -512,6 +518,9 @@ def normalize_numbers(text: str) -> str:
     num_chars = r'[零二三四五六七八九十]'
     pattern = rf'({num_chars}{{1,3}})({counters})'
 
+    # Pre-check: skip adverbial 十分 (means "very much", not "10 minutes")
+    text = re.sub(r'十分(?=[受到的地得])', '___SHIFEN___', text)
+
     def replace_match(m):
         cn_str, counter = m.group(1), m.group(2)
         val = cn_to_arabic(cn_str)
@@ -519,7 +528,9 @@ def normalize_numbers(text: str) -> str:
             return f"{val}{counter}"
         return m.group(0)
 
-    return re.sub(pattern, replace_match, text)
+    text = re.sub(pattern, replace_match, text)
+    text = text.replace('___SHIFEN___', '十分')
+    return text
 
 
 def deduplicate_segments(subs: list[Sub], window: int = 3) -> list[Sub]:
