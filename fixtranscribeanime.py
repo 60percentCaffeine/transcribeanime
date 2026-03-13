@@ -21,6 +21,10 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 from pypinyin import lazy_pinyin, Style
+from pypinyin_g2pw import G2PWPinyin
+
+# Global context-aware pinyin converter (handles polyphones like 樂=yuè in 樂團 vs lè in 快樂)
+_g2pw = G2PWPinyin()
 
 load_dotenv()
 
@@ -145,11 +149,14 @@ def find_refs_by_overlap(sub: Sub, refs: list[Sub], n: int = 5, window_ms: int =
     return [r for _, r in scored[:n]]
 
 
-def is_homophone(wrong: str, correct: str) -> bool:
+def is_homophone(wrong: str, correct: str, wrong_pinyin: list[str] | None = None, correct_pinyin: list[str] | None = None) -> bool:
     """Check if two strings are homophones using pypinyin.
 
     Only checks CHANGED characters — all changed chars must have
     similar pronunciation for this to be considered a homophone fix.
+
+    If wrong_pinyin/correct_pinyin are provided (from context-aware g2pw),
+    use those instead of dictionary lookup.
     """
     if len(wrong) != len(correct):
         return False
@@ -157,17 +164,23 @@ def is_homophone(wrong: str, correct: str) -> bool:
         return False
 
     # Get pinyin without tones
-    wrong_py = lazy_pinyin(wrong, style=Style.NORMAL)
-    correct_py = lazy_pinyin(correct, style=Style.NORMAL)
+    if wrong_pinyin and len(wrong_pinyin) == len(wrong):
+        w_py = wrong_pinyin
+    else:
+        w_py = lazy_pinyin(wrong, style=Style.NORMAL)
+    if correct_pinyin and len(correct_pinyin) == len(correct):
+        c_py = correct_pinyin
+    else:
+        c_py = lazy_pinyin(correct, style=Style.NORMAL)
 
-    if len(wrong_py) != len(correct_py):
+    if len(w_py) != len(c_py):
         return False
 
     # Only check characters that actually changed
     changed_count = 0
     similar_count = 0
 
-    for wc, cc, wp, cp in zip(wrong, correct, wrong_py, correct_py):
+    for wc, cc, wp, cp in zip(wrong, correct, w_py, c_py):
         if wc == cc:
             continue  # unchanged char, skip
         changed_count += 1
@@ -284,6 +297,13 @@ def align_and_find_homophone_subs(transcribed: str, ref_text: str) -> list[tuple
             else:
                 dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
 
+    # Get context-aware pinyin for full strings (handles polyphones)
+    # Fall back to per-char lookup if g2pw returns mismatched length (non-Chinese chars)
+    t_py = _g2pw.lazy_pinyin(t, style=Style.NORMAL)
+    t_py_ok = len(t_py) == n
+    r_py = _g2pw.lazy_pinyin(r, style=Style.NORMAL)
+    r_py_ok = len(r_py) == m
+
     # Backtrack to find alignment
     subs = []
     matches = 0
@@ -297,10 +317,10 @@ def align_and_find_homophone_subs(transcribed: str, ref_text: str) -> list[tuple
             j -= 1
         elif dp[i][j] == dp[i-1][j-1] + 1:
             total_ops += 1
-            # Substitution - check if homophone
+            # Substitution - check if homophone using context-aware pinyin
             tc, rc = t[i-1], r[j-1]
-            tp = lazy_pinyin(tc, style=Style.NORMAL)[0]
-            rp = lazy_pinyin(rc, style=Style.NORMAL)[0]
+            tp = t_py[i-1] if t_py_ok else lazy_pinyin(tc, style=Style.NORMAL)[0]
+            rp = r_py[j-1] if r_py_ok else lazy_pinyin(rc, style=Style.NORMAL)[0]
             if tp == rp or similar_pinyin(tp, rp):
                 subs.append((tc, rc))
             i -= 1
@@ -406,6 +426,10 @@ def get_fixes(
 
 
 def apply_fixes(transcribed: str, fixes: list[dict]) -> str:
+    # Get context-aware pinyin for full sentence (handles polyphones like 樂=yuè in 樂團)
+    sentence_py = _g2pw.lazy_pinyin(transcribed, style=Style.NORMAL)
+    py_aligned = len(sentence_py) == len(transcribed)
+
     result = transcribed
     for fix in fixes:
         if not isinstance(fix, dict):
@@ -419,11 +443,28 @@ def apply_fixes(transcribed: str, fixes: list[dict]) -> str:
         # Reject if lengths differ
         if len(correct) != len(wrong):
             continue
-        # Verify it's actually a homophone using pypinyin
-        if not is_homophone(wrong, correct):
+        # Extract context-aware pinyin for the wrong substring
+        wrong_py = None
+        if py_aligned:
+            idx = result.find(wrong)
+            if idx >= 0 and idx + len(wrong) <= len(sentence_py):
+                wrong_py = sentence_py[idx:idx + len(wrong)]
+        # Get context-aware pinyin for the correct string
+        correct_py = _g2pw.lazy_pinyin(correct, style=Style.NORMAL)
+        if len(correct_py) != len(correct):
+            correct_py = None
+        # Verify it's actually a homophone using context-aware pinyin
+        if not is_homophone(wrong, correct, wrong_pinyin=wrong_py, correct_pinyin=correct_py):
             print(f"    [rejected] {wrong}→{correct} (pinyin mismatch)")
             continue
         result = result.replace(wrong, correct, 1)
+        # Update sentence pinyin after replacement
+        new_py = _g2pw.lazy_pinyin(result, style=Style.NORMAL)
+        if len(new_py) == len(result):
+            sentence_py = new_py
+            py_aligned = True
+        else:
+            py_aligned = False
 
     return result
 
