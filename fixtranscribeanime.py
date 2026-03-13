@@ -20,20 +20,34 @@ from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
-from pypinyin import Style
-from pypinyin_g2pw import G2PWPinyin
+from pypinyin import lazy_pinyin, Style
 
-# Global context-aware pinyin converter (handles polyphones like 樂=yuè in 樂團 vs lè in 快樂)
-_g2pw = G2PWPinyin()
+_g2pw = None
+_use_g2pw = True
 
 
-def g2pw_pinyin(text: str) -> list[str]:
-    """Get context-aware pinyin with guaranteed 1:1 character-to-pinyin mapping.
+def init_pinyin(use_g2pw: bool = True):
+    """Initialize pinyin backend. Call before using get_pinyin()."""
+    global _g2pw, _use_g2pw
+    _use_g2pw = use_g2pw
+    if use_g2pw:
+        from pypinyin_g2pw import G2PWPinyin
+        _g2pw = G2PWPinyin()
 
+
+def get_pinyin(text: str) -> list[str]:
+    """Get pinyin with guaranteed 1:1 character-to-pinyin mapping.
+
+    When using g2pw: context-aware (handles polyphones like 樂=yuè in 樂團 vs lè in 快樂).
     pypinyin-g2pw collapses consecutive non-Chinese characters into single tokens
     (e.g. 'ABC' -> ['ABC']). This function expands them back to one element per character.
+
+    When using plain pypinyin: no context awareness but no g2pw model dependency.
     """
-    raw = _g2pw.lazy_pinyin(text, style=Style.NORMAL)
+    if _use_g2pw:
+        raw = _g2pw.lazy_pinyin(text, style=Style.NORMAL)
+    else:
+        raw = lazy_pinyin(text, style=Style.NORMAL)
     if len(raw) == len(text):
         return raw
     result = []
@@ -196,8 +210,8 @@ def is_homophone(wrong: str, correct: str, wrong_pinyin: list[str] | None = None
         return False
 
     # Get pinyin without tones
-    w_py = wrong_pinyin if wrong_pinyin and len(wrong_pinyin) == len(wrong) else g2pw_pinyin(wrong)
-    c_py = correct_pinyin if correct_pinyin and len(correct_pinyin) == len(correct) else g2pw_pinyin(correct)
+    w_py = wrong_pinyin if wrong_pinyin and len(wrong_pinyin) == len(wrong) else get_pinyin(wrong)
+    c_py = correct_pinyin if correct_pinyin and len(correct_pinyin) == len(correct) else get_pinyin(correct)
 
     if len(w_py) != len(c_py):
         return False
@@ -324,8 +338,8 @@ def align_and_find_homophone_subs(transcribed: str, ref_text: str) -> list[tuple
                 dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
 
     # Get context-aware pinyin for full strings (handles polyphones)
-    t_py = g2pw_pinyin(t)
-    r_py = g2pw_pinyin(r)
+    t_py = get_pinyin(t)
+    r_py = get_pinyin(r)
 
     # Backtrack to find alignment
     subs = []
@@ -456,7 +470,7 @@ def get_fixes(
 
 def apply_fixes(transcribed: str, fixes: list[dict]) -> str:
     # Get context-aware pinyin for full sentence (handles polyphones like 樂=yuè in 樂團)
-    sentence_py = g2pw_pinyin(transcribed)
+    sentence_py = get_pinyin(transcribed)
 
     result = transcribed
     for fix in fixes:
@@ -475,14 +489,14 @@ def apply_fixes(transcribed: str, fixes: list[dict]) -> str:
         idx = result.find(wrong)
         wrong_py = sentence_py[idx:idx + len(wrong)]
         # Get context-aware pinyin for the correct string
-        correct_py = g2pw_pinyin(correct)
+        correct_py = get_pinyin(correct)
         # Verify it's actually a homophone using context-aware pinyin
         if not is_homophone(wrong, correct, wrong_pinyin=wrong_py, correct_pinyin=correct_py):
             print(f"    [rejected] {wrong}→{correct} (pinyin mismatch)")
             continue
         result = result.replace(wrong, correct, 1)
         # Update sentence pinyin after replacement
-        sentence_py = g2pw_pinyin(result)
+        sentence_py = get_pinyin(result)
 
     return result
 
@@ -592,7 +606,10 @@ def main():
     parser.add_argument("--delay", type=float, default=0.0, help="Delay between API calls (default: 0.0s)")
     parser.add_argument("--workers", "-w", type=int, default=20, help="Number of parallel API workers (default: 20)")
     parser.add_argument("--ref-count", type=int, default=5, help="Number of reference lines per segment (default: 5)")
+    parser.add_argument("--no-g2pw", action="store_true", help="Use plain pypinyin instead of pypinyin-g2pw for pinyin conversion")
     args = parser.parse_args()
+
+    init_pinyin(use_g2pw=not args.no_g2pw)
 
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if not api_key:
