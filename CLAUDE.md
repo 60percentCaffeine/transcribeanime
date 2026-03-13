@@ -8,3 +8,5 @@ test.sh contains two test: white box and black box. Changing the contents of the
 After implementing an approach, ALWAYS run test.sh with no exceptions. The goal is to get 80%+ accuracy by combining multiple approaches, as measured by the black box test.
 
 APPROACHES.md contains a list of approaches to the problem. When trying an approach, it should ALWAYS leave an entry in this file. The entry should contain: short description of the approach, example from white box test the approach is supposed to fix, have we tried it in this project yet (YES/TOBETESTED), white box and black box evaluation numbers, whether the approach was successful (YES/NO), and additional comments on the results. In addition to this table it can optionally contain other sections describing the approaches or additional info.
+
+Use ckiptagger instead of jieba for Traditional Chinese.
