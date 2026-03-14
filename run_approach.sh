@@ -51,8 +51,6 @@ has_untested() {
 }
 
 prompt=$(cat <<'EOF'
-@APPROACHES.md
-
 Test the first untested approach from APPROACHES.md. Run test.sh to check it works and improves the results. Don't be afraid to iterate on it 2-3 times to get it right.
 
 When you're done, update the entry in APPROACHES.md with the results. If the approach was successful (i.e. black box score is improved) add a section that explains the results. If only white box results are improved, the approach is considered not successful. In the section include: what was done, key numbers or findings, any surprises or quality issues to watch for in downstream tasks.
