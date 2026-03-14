@@ -413,6 +413,170 @@ def fix_common_homophones(text: str, ref_subs: list[Sub]) -> str:
     return text
 
 
+def extract_entity_mappings(ref_subs: list[Sub], input_subs: list[Sub], api_key: str, model: str) -> dict[str, str]:
+    """Extract named entity variant mappings using LLM.
+
+    Sends both reference and transcription text to LLM, asks it to identify
+    entity names in the reference and find their ASR-mangled variants in the
+    transcription. Returns a dict mapping wrong_form -> correct_form.
+    """
+    # Collect Chinese reference lines
+    chinese_lines = []
+    for r in ref_subs:
+        text = re.sub(r'<[^>]+>', '', r.text).strip()
+        text = re.sub(r'\{\\[^}]+\}', '', text).strip()
+        if not re.search(r'[\u4e00-\u9fff]', text):
+            continue
+        kana_count = len(re.findall(r'[\u3040-\u309f\u30a0-\u30ff]', text))
+        if kana_count > len(text) * 0.5:
+            continue
+        if len(text) > 60:
+            continue
+        chinese_lines.append(text)
+
+    if not chinese_lines:
+        return {}
+
+    seen = set()
+    unique_ref = []
+    for line in chinese_lines:
+        if line not in seen:
+            seen.add(line)
+            unique_ref.append(line)
+
+    ref_text = "\n".join(unique_ref[:150])
+
+    # Collect transcription lines
+    trans_lines = []
+    seen_t = set()
+    for s in input_subs:
+        text = s.text.strip()
+        if text and text not in seen_t and re.search(r'[\u4e00-\u9fff]', text):
+            seen_t.add(text)
+            trans_lines.append(text)
+
+    trans_text = "\n".join(trans_lines[:200])
+
+    prompt = (
+        "以下有兩組字幕：「參考字幕」是正確的翻譯，「ASR轉錄」是語音識別的結果。\n"
+        "ASR經常把專有名詞（角色名、地名、種族名、技能名等）寫錯，用了發音相近但字不同的漢字。\n\n"
+        "任務：\n"
+        "1. 先從參考字幕中找出所有專有名詞\n"
+        "2. 再從ASR轉錄中找出這些名詞的錯誤寫法（發音相近但漢字不同）\n"
+        "3. 回覆JSON物件，key=ASR錯誤寫法，value=參考字幕正確寫法\n\n"
+        "規則：\n"
+        "- 只替換專有名詞，不要替換普通詞語（如「頭目」「主人」「嚮導」等不是專有名詞）\n"
+        "- ASR錯誤和正確寫法的發音必須相近（如 立魔路≈利姆路，因為每個字的聲母相同）\n"
+        "- 包含所有變體，即使只出現一次\n"
+        "- 如果沒有錯誤回覆 {}\n\n"
+        f"參考字幕：\n{ref_text}\n\n"
+        f"ASR轉錄：\n{trans_text}"
+    )
+
+    messages = [{"role": "user", "content": prompt}]
+    for attempt in range(3):
+        try:
+            content = call_openrouter(messages, api_key, model, max_tokens=1000)
+            break
+        except Exception as e:
+            if attempt < 2:
+                print(f"  Entity mapping attempt {attempt+1} failed: {e}, retrying...")
+                time.sleep(2)
+            else:
+                print(f"  Entity mapping failed after 3 attempts: {e}")
+                return {}
+    content = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL).strip()
+    content = re.sub(r"^```json\s*|^```\s*|```$", "", content, flags=re.MULTILINE).strip()
+
+    try:
+        mappings = json.loads(content)
+        if isinstance(mappings, dict):
+            # Filter: both keys and values must be strings of length >= 2
+            result = {}
+            for k, v in mappings.items():
+                if isinstance(k, str) and isinstance(v, str) and len(k) >= 2 and len(v) >= 2 and k != v:
+                    result[k] = v
+            return result
+    except json.JSONDecodeError:
+        pass
+    return {}
+
+
+def apply_entity_mappings(text: str, mappings: dict[str, str]) -> str:
+    """Apply named entity replacement mappings to text."""
+    for wrong, correct in mappings.items():
+        if wrong in text:
+            print(f"    [entity] {wrong}→{correct}")
+            text = text.replace(wrong, correct)
+    return text
+
+
+def _get_initial(py: str) -> tuple[str, str]:
+    """Extract initial and final from a pinyin syllable."""
+    for init in ['zh', 'ch', 'sh', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l',
+                  'g', 'k', 'h', 'j', 'q', 'x', 'r', 'z', 'c', 's', 'y', 'w']:
+        if py.startswith(init):
+            return init, py[len(init):]
+    return '', py
+
+
+def fix_named_entities_auto(text: str, entities: list[str], ref_subs: list[Sub]) -> str:
+    """Fix ASR-mangled named entities by automated matching against entity list.
+
+    Uses lenient matching: all changed characters must share the same initial
+    consonant or have similar pinyin, and at least one character must match exactly.
+    """
+    ref_text = " ".join(r.text for r in ref_subs)
+    entity_set = set(entities)
+
+    sorted_entities = sorted(entities, key=len, reverse=True)
+
+    for entity in sorted_entities:
+        n = len(entity)
+        if n < 3 or entity in text:
+            continue
+        if entity not in ref_text:
+            continue
+
+        entity_py = get_pinyin(entity)
+        best_pos = -1
+        best_exact = 0
+
+        for pos in range(len(text) - n + 1):
+            window = text[pos:pos + n]
+            if window in entity_set:
+                continue
+
+            window_py = get_pinyin(window)
+
+            exact = 0
+            compatible = True
+            for wc, ec, wp, ep in zip(window, entity, window_py, entity_py):
+                if wc == ec:
+                    exact += 1
+                elif wp == ep or similar_pinyin(wp, ep):
+                    pass
+                else:
+                    wi, _ = _get_initial(wp)
+                    ei, _ = _get_initial(ep)
+                    if wi and wi == ei:
+                        pass
+                    else:
+                        compatible = False
+                        break
+
+            if compatible and exact >= 1 and exact > best_exact:
+                best_exact = exact
+                best_pos = pos
+
+        if best_pos >= 0:
+            old = text[best_pos:best_pos + n]
+            print(f"    [entity-auto] {old}→{entity}")
+            text = text[:best_pos] + entity + text[best_pos + n:]
+
+    return text
+
+
 def call_openrouter(messages: list[dict], api_key: str, model: str, max_tokens: int = 300, temperature: float = 0.0) -> str:
     headers = {
         "Authorization": f"Bearer {api_key}",
@@ -424,7 +588,7 @@ def call_openrouter(messages: list[dict], api_key: str, model: str, max_tokens: 
         "max_tokens": max_tokens,
         "temperature": temperature,
     }
-    resp = requests.post(OPENROUTER_URL, headers=headers, json=payload, timeout=30)
+    resp = requests.post(OPENROUTER_URL, headers=headers, json=payload, timeout=60)
     resp.raise_for_status()
     data = resp.json()
     content = data["choices"][0]["message"]["content"].strip()
@@ -627,6 +791,70 @@ def main():
     ref_subs = clean_reference_subs(ref_subs)
     print(f"  {len(ref_subs)} segments (after cleaning)")
 
+    print(f"\nExtracting named entities from reference...")
+    # Extract entity list from reference
+    chinese_ref_lines = []
+    for r in ref_subs:
+        text = re.sub(r'<[^>]+>', '', r.text).strip()
+        text = re.sub(r'\{\\[^}]+\}', '', text).strip()
+        if re.search(r'[\u4e00-\u9fff]', text) and len(text) <= 60:
+            kana = len(re.findall(r'[\u3040-\u309f\u30a0-\u30ff]', text))
+            if kana <= len(text) * 0.5:
+                chinese_ref_lines.append(text)
+    seen_ref = set()
+    unique_ref_lines = [l for l in chinese_ref_lines if l not in seen_ref and not seen_ref.add(l)]
+    entity_prompt = (
+        "從以下動畫字幕中提取所有專有名詞（角色名、地名、組織名、種族名、技能名、怪物名等）。\n"
+        "注意：\n"
+        "- 只提取專有名詞，不要提取普通詞語\n"
+        "- 每個名詞只列一次\n"
+        "- 包含所有出現的人名，即使只出現一次（如 培斯塔、迦盧姆、葛洛姆）\n"
+        "- 包含所有怪物/生物的名稱（如 盔甲龍）\n"
+        "以JSON陣列格式回覆，例如：[\"利姆路\", \"德瓦崗\", \"培斯塔\"]\n\n"
+        f"字幕文本：\n" + "\n".join(unique_ref_lines[:200])
+    )
+    entity_list = []
+    for attempt in range(3):
+        try:
+            econtent = call_openrouter([{"role": "user", "content": entity_prompt}],
+                                       api_key, args.model, max_tokens=800)
+            econtent = re.sub(r"<think>.*?</think>", "", econtent, flags=re.DOTALL).strip()
+            econtent = re.sub(r"^```json\s*|^```\s*|```$", "", econtent, flags=re.MULTILINE).strip()
+            elist = json.loads(econtent)
+            if isinstance(elist, list):
+                entity_list = [e for e in elist if isinstance(e, str) and len(e) >= 2]
+            break
+        except Exception as e:
+            if attempt < 2:
+                time.sleep(2)
+            else:
+                print(f"  Entity list extraction failed: {e}")
+    print(f"  Entity list ({len(entity_list)}): {', '.join(entity_list[:30])}")
+
+    # Extract entity mappings (wrong ASR forms -> correct reference forms)
+    from wordfreq import word_frequency
+    COMMON_WORD_THRESHOLD = 1e-6  # words more frequent than this are common vocabulary
+    print(f"\nExtracting entity mappings...")
+    entity_mappings = extract_entity_mappings(ref_subs, input_subs, api_key, args.model)
+    # Filter out common words using wordfreq, and require value appears in reference
+    ref_full_text = " ".join(r.text for r in ref_subs)
+    filtered_mappings = {}
+    for k, v in entity_mappings.items():
+        k_freq = word_frequency(k, 'zh')
+        v_freq = word_frequency(v, 'zh')
+        if k_freq > COMMON_WORD_THRESHOLD or v_freq > COMMON_WORD_THRESHOLD:
+            print(f"  Filtered out common word mapping: {k}→{v} (freq: {k_freq:.2e}/{v_freq:.2e})")
+            continue
+        if v not in ref_full_text:
+            print(f"  Filtered out (value not in reference): {k}→{v}")
+            continue
+        if len(k) > 6 or len(v) > 6:
+            print(f"  Filtered out (too long): {k}→{v}")
+            continue
+        filtered_mappings[k] = v
+    entity_mappings = filtered_mappings
+    print(f"  Entity mappings ({len(entity_mappings)}): {entity_mappings}")
+
     print(f"\nCorrecting with {args.model} ({args.workers} workers)...")
 
     def process_sub(i: int, sub: Sub) -> tuple[int, Sub, str]:
@@ -649,6 +877,14 @@ def main():
 
             # Step 3: Common ASR homophone pairs (他/她/它, 的/地/得, etc.)
             fixed = fix_common_homophones(fixed, closest)
+
+            # Step 4: Named entity correction (LLM mappings)
+            if entity_mappings:
+                fixed = apply_entity_mappings(fixed, entity_mappings)
+
+            # Step 5: Named entity correction (auto-matching to reference forms)
+            if entity_list:
+                fixed = fix_named_entities_auto(fixed, entity_list, closest)
         except Exception as e:
             print(f"  [{i+1}/{len(input_subs)}] Error: {e} — keeping original")
             fixed = sub.text
