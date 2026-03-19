@@ -771,6 +771,7 @@ def main():
     parser.add_argument("--workers", "-w", type=int, default=20, help="Number of parallel API workers (default: 20)")
     parser.add_argument("--ref-count", type=int, default=5, help="Number of reference lines per segment (default: 5)")
     parser.add_argument("--no-g2pw", action="store_true", help="Use plain pypinyin instead of pypinyin-g2pw for pinyin conversion")
+    parser.add_argument("--no-entities", action="store_true", help="Disable named entity extraction and replacement")
     args = parser.parse_args()
 
     init_pinyin(use_g2pw=not args.no_g2pw)
@@ -791,69 +792,73 @@ def main():
     ref_subs = clean_reference_subs(ref_subs)
     print(f"  {len(ref_subs)} segments (after cleaning)")
 
-    print(f"\nExtracting named entities from reference...")
-    # Extract entity list from reference
-    chinese_ref_lines = []
-    for r in ref_subs:
-        text = re.sub(r'<[^>]+>', '', r.text).strip()
-        text = re.sub(r'\{\\[^}]+\}', '', text).strip()
-        if re.search(r'[\u4e00-\u9fff]', text) and len(text) <= 60:
-            kana = len(re.findall(r'[\u3040-\u309f\u30a0-\u30ff]', text))
-            if kana <= len(text) * 0.5:
-                chinese_ref_lines.append(text)
-    seen_ref = set()
-    unique_ref_lines = [l for l in chinese_ref_lines if l not in seen_ref and not seen_ref.add(l)]
-    entity_prompt = (
-        "從以下動畫字幕中提取所有專有名詞（角色名、地名、組織名、種族名、技能名、怪物名等）。\n"
-        "注意：\n"
-        "- 只提取專有名詞，不要提取普通詞語\n"
-        "- 每個名詞只列一次\n"
-        "- 包含所有出現的人名，即使只出現一次（如 培斯塔、迦盧姆、葛洛姆）\n"
-        "- 包含所有怪物/生物的名稱（如 盔甲龍）\n"
-        "以JSON陣列格式回覆，例如：[\"利姆路\", \"德瓦崗\", \"培斯塔\"]\n\n"
-        f"字幕文本：\n" + "\n".join(unique_ref_lines[:200])
-    )
     entity_list = []
-    for attempt in range(3):
-        try:
-            econtent = call_openrouter([{"role": "user", "content": entity_prompt}],
-                                       api_key, args.model, max_tokens=800)
-            econtent = re.sub(r"<think>.*?</think>", "", econtent, flags=re.DOTALL).strip()
-            econtent = re.sub(r"^```json\s*|^```\s*|```$", "", econtent, flags=re.MULTILINE).strip()
-            elist = json.loads(econtent)
-            if isinstance(elist, list):
-                entity_list = [e for e in elist if isinstance(e, str) and len(e) >= 2]
-            break
-        except Exception as e:
-            if attempt < 2:
-                time.sleep(2)
-            else:
-                print(f"  Entity list extraction failed: {e}")
-    print(f"  Entity list ({len(entity_list)}): {', '.join(entity_list[:30])}")
+    entity_mappings = {}
+    if not args.no_entities:
+        print(f"\nExtracting named entities from reference...")
+        # Extract entity list from reference
+        chinese_ref_lines = []
+        for r in ref_subs:
+            text = re.sub(r'<[^>]+>', '', r.text).strip()
+            text = re.sub(r'\{\\[^}]+\}', '', text).strip()
+            if re.search(r'[\u4e00-\u9fff]', text) and len(text) <= 60:
+                kana = len(re.findall(r'[\u3040-\u309f\u30a0-\u30ff]', text))
+                if kana <= len(text) * 0.5:
+                    chinese_ref_lines.append(text)
+        seen_ref = set()
+        unique_ref_lines = [l for l in chinese_ref_lines if l not in seen_ref and not seen_ref.add(l)]
+        entity_prompt = (
+            "從以下動畫字幕中提取所有專有名詞（角色名、地名、組織名、種族名、技能名、怪物名等）。\n"
+            "注意：\n"
+            "- 只提取專有名詞，不要提取普通詞語\n"
+            "- 每個名詞只列一次\n"
+            "- 包含所有出現的人名，即使只出現一次（如 培斯塔、迦盧姆、葛洛姆）\n"
+            "- 包含所有怪物/生物的名稱（如 盔甲龍）\n"
+            "以JSON陣列格式回覆，例如：[\"利姆路\", \"德瓦崗\", \"培斯塔\"]\n\n"
+            f"字幕文本：\n" + "\n".join(unique_ref_lines[:200])
+        )
+        for attempt in range(3):
+            try:
+                econtent = call_openrouter([{"role": "user", "content": entity_prompt}],
+                                           api_key, args.model, max_tokens=800)
+                econtent = re.sub(r"<think>.*?</think>", "", econtent, flags=re.DOTALL).strip()
+                econtent = re.sub(r"^```json\s*|^```\s*|```$", "", econtent, flags=re.MULTILINE).strip()
+                elist = json.loads(econtent)
+                if isinstance(elist, list):
+                    entity_list = [e for e in elist if isinstance(e, str) and len(e) >= 2]
+                break
+            except Exception as e:
+                if attempt < 2:
+                    time.sleep(2)
+                else:
+                    print(f"  Entity list extraction failed: {e}")
+        print(f"  Entity list ({len(entity_list)}): {', '.join(entity_list[:30])}")
 
-    # Extract entity mappings (wrong ASR forms -> correct reference forms)
-    from wordfreq import word_frequency
-    COMMON_WORD_THRESHOLD = 1e-6  # words more frequent than this are common vocabulary
-    print(f"\nExtracting entity mappings...")
-    entity_mappings = extract_entity_mappings(ref_subs, input_subs, api_key, args.model)
-    # Filter out common words using wordfreq, and require value appears in reference
-    ref_full_text = " ".join(r.text for r in ref_subs)
-    filtered_mappings = {}
-    for k, v in entity_mappings.items():
-        k_freq = word_frequency(k, 'zh')
-        v_freq = word_frequency(v, 'zh')
-        if k_freq > COMMON_WORD_THRESHOLD or v_freq > COMMON_WORD_THRESHOLD:
-            print(f"  Filtered out common word mapping: {k}→{v} (freq: {k_freq:.2e}/{v_freq:.2e})")
-            continue
-        if v not in ref_full_text:
-            print(f"  Filtered out (value not in reference): {k}→{v}")
-            continue
-        if len(k) > 6 or len(v) > 6:
-            print(f"  Filtered out (too long): {k}→{v}")
-            continue
-        filtered_mappings[k] = v
-    entity_mappings = filtered_mappings
-    print(f"  Entity mappings ({len(entity_mappings)}): {entity_mappings}")
+        # Extract entity mappings (wrong ASR forms -> correct reference forms)
+        from wordfreq import word_frequency
+        COMMON_WORD_THRESHOLD = 1e-6  # words more frequent than this are common vocabulary
+        print(f"\nExtracting entity mappings...")
+        entity_mappings = extract_entity_mappings(ref_subs, input_subs, api_key, args.model)
+        # Filter out common words using wordfreq, and require value appears in reference
+        ref_full_text = " ".join(r.text for r in ref_subs)
+        filtered_mappings = {}
+        for k, v in entity_mappings.items():
+            k_freq = word_frequency(k, 'zh')
+            v_freq = word_frequency(v, 'zh')
+            if k_freq > COMMON_WORD_THRESHOLD or v_freq > COMMON_WORD_THRESHOLD:
+                print(f"  Filtered out common word mapping: {k}→{v} (freq: {k_freq:.2e}/{v_freq:.2e})")
+                continue
+            if v not in ref_full_text:
+                print(f"  Filtered out (value not in reference): {k}→{v}")
+                continue
+            if len(k) > 6 or len(v) > 6:
+                print(f"  Filtered out (too long): {k}→{v}")
+                continue
+            filtered_mappings[k] = v
+        entity_mappings = filtered_mappings
+        print(f"  Entity mappings ({len(entity_mappings)}): {entity_mappings}")
+    else:
+        print(f"\nNamed entity replacement disabled.")
 
     print(f"\nCorrecting with {args.model} ({args.workers} workers)...")
 
