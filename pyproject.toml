@@ -5,17 +5,22 @@ description = ""
 authors = [
     {name = "Your Name",email = "you@example.com"}
 ]
-readme = "README.md"
 requires-python = ">=3.11,<4"
 dependencies = [
-    "pyobjc-framework-speech (>=12.1,<13.0)",
-    "mlx-whisper (>=0.4.3,<0.5.0)",
+    "pyobjc-framework-speech (>=12.1,<13.0) ; sys_platform == 'darwin'",
+    "mlx-whisper (>=0.4.3,<0.5.0) ; sys_platform == 'darwin'",
     "requests (>=2.32.5,<3.0.0)",
     "python-dotenv (>=1.2.2,<2.0.0)",
     "pypinyin (>=0.55.0,<0.56.0)",
     "wordfreq (>=3.1.1,<4.0.0)",
 ]
 
+
+[project.scripts]
+fixtranscribeanime = "fixtranscribeanime:main"
+
+[tool.poetry]
+packages = [{include = "fixtranscribeanime.py"}]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
