@@ -19,6 +19,7 @@ from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
+from opencc import OpenCC
 from pypinyin import lazy_pinyin, Style
 
 _g2pw = None
@@ -114,6 +115,45 @@ SYSTEM_PROMPT = """\
 錯誤例子（不要改）：
 - 辛苦→糟糕 ✗  - 留言→評論 ✗  - 回應→理睬 ✗
 - 樂團→樂隊 ✗  - 爛歌→屎歌 ✗  - 試彈→翻彈 ✗"""
+
+SYSTEM_PROMPT_SIMPLIFIED = """\
+你是一名专业的简体中文字幕校对编辑，专门修正语音识别（ASR）产生的同音字/近音字错误。
+
+你会收到一行ASR转录字幕、前后文、和附近的参考字幕（从日文翻译而来）。
+
+你的任务是找出ASR转录中的同音字/近音字错误，并以JSON格式回复。
+
+什么是同音字错误：ASR听到正确的发音，但写成了发音相同或相似的不同汉字。
+常见类型：
+1. 普通同音字：「过重」→「国中」、「文化机」→「文化祭」、「离队」→「里蹲」
+2. 成语/固定搭配被拆散：「最根就地」→「追根究底」（每个字都是近音字错误）
+3. 日常词汇被拆散：「避除」→「壁橱」（bìchú，完全同音）
+
+什么不是同音字错误（绝对不要改）：
+- 同义词替换（辛苦→糟糕、留言→评论、回应→理睬、摆→放）
+- 措辞不同但意思相同（人气→热门、乐团→乐队）
+- 语序调整、添加或删除字词
+
+规则：
+- 只找发音相同或相似但汉字写错的情况
+- 修正的字和原字必须读音相同或很接近
+- 特别注意：是否有常见成语、四字格或词语被ASR写成了同音但不成词的汉字组合
+- 参考字幕只用来理解这句话应该表达什么意思
+- 如果原文没有同音字错误，回复空列表 []
+- 宁可漏报也不要误报
+- 每个修正的「wrong」和「correct」字数必须相同
+
+回复格式（JSON数组）：
+[{"wrong": "错误的字", "correct": "正确的字"}]
+
+正确例子：
+- 过重→国中 ✓  - 文化机→文化祭 ✓  - 离队→里蹲 ✓
+- 最根就地→追根究底 ✓（成语修正）  - 避除→壁橱 ✓（同音词）
+- 登上→等上 ✓  - 反碎→粉碎 ✓
+
+错误例子（不要改）：
+- 辛苦→糟糕 ✗  - 留言→评论 ✗  - 回应→理睬 ✗
+- 乐团→乐队 ✗  - 烂歌→屎歌 ✗  - 试弹→翻弹 ✗"""
 
 
 @dataclass
@@ -412,7 +452,7 @@ def fix_common_homophones(text: str, ref_subs: list[Sub]) -> str:
     return text
 
 
-def extract_entity_mappings(ref_subs: list[Sub], input_subs: list[Sub], api_key: str, model: str) -> dict[str, str]:
+def extract_entity_mappings(ref_subs: list[Sub], input_subs: list[Sub], api_key: str, model: str, simplified: bool = False) -> dict[str, str]:
     """Extract named entity variant mappings using LLM.
 
     Sends both reference and transcription text to LLM, asks it to identify
@@ -457,6 +497,20 @@ def extract_entity_mappings(ref_subs: list[Sub], input_subs: list[Sub], api_key:
     trans_text = "\n".join(trans_lines[:200])
 
     prompt = (
+        "以下有两组字幕：「参考字幕」是正确的翻译，「ASR转录」是语音识别的结果。\n"
+        "ASR经常把专有名词（角色名、地名、种族名、技能名等）写错，用了发音相近但字不同的汉字。\n\n"
+        "任务：\n"
+        "1. 先从参考字幕中找出所有专有名词\n"
+        "2. 再从ASR转录中找出这些名词的错误写法（发音相近但汉字不同）\n"
+        "3. 回复JSON对象，key=ASR错误写法，value=参考字幕正确写法\n\n"
+        "规则：\n"
+        "- 只替换专有名词，不要替换普通词语（如「头目」「主人」「向导」等不是专有名词）\n"
+        "- ASR错误和正确写法的发音必须相近（如 立魔路≈利姆路，因为每个字的声母相同）\n"
+        "- 包含所有变体，即使只出现一次\n"
+        "- 如果没有错误回复 {}\n\n"
+        f"参考字幕：\n{ref_text}\n\n"
+        f"ASR转录：\n{trans_text}"
+    ) if simplified else (
         "以下有兩組字幕：「參考字幕」是正確的翻譯，「ASR轉錄」是語音識別的結果。\n"
         "ASR經常把專有名詞（角色名、地名、種族名、技能名等）寫錯，用了發音相近但字不同的漢字。\n\n"
         "任務：\n"
@@ -601,20 +655,29 @@ def get_fixes(
     context_lines: list[str],
     api_key: str,
     model: str,
+    system_prompt: str = SYSTEM_PROMPT,
 ) -> list[dict]:
     ref_text = "\n".join(
         f"  [{ms_to_srt(r.start_ms)}] {r.text}" for r in ref_lines
     )
     ctx_text = "\n".join(f"  {line}" for line in context_lines)
-    user_msg = (
-        f"ASR轉錄：{transcribed}\n\n"
-        f"前後文：\n{ctx_text}\n\n"
-        f"附近參考字幕（翻譯自日文）：\n{ref_text}\n\n"
-        f"請找出同音字/近音字錯誤，以JSON陣列格式回覆。如果沒有錯誤回覆 []"
-    )
+    if system_prompt == SYSTEM_PROMPT_SIMPLIFIED:
+        user_msg = (
+            f"ASR转录：{transcribed}\n\n"
+            f"前后文：\n{ctx_text}\n\n"
+            f"附近参考字幕（翻译自日文）：\n{ref_text}\n\n"
+            f"请找出同音字/近音字错误，以JSON数组格式回复。如果没有错误回复 []"
+        )
+    else:
+        user_msg = (
+            f"ASR轉錄：{transcribed}\n\n"
+            f"前後文：\n{ctx_text}\n\n"
+            f"附近參考字幕（翻譯自日文）：\n{ref_text}\n\n"
+            f"請找出同音字/近音字錯誤，以JSON陣列格式回覆。如果沒有錯誤回覆 []"
+        )
 
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_msg},
     ]
 
@@ -724,9 +787,22 @@ def main():
     parser.add_argument("--ref-count", type=int, default=5, help="Number of reference lines per segment (default: 5)")
     parser.add_argument("--no-g2pw", action="store_true", help="Use plain pypinyin instead of pypinyin-g2pw for pinyin conversion")
     parser.add_argument("--no-entities", action="store_true", help="Disable named entity extraction and replacement")
+    parser.add_argument("--chinese", choices=["s", "t"], required=True, help="Chinese variant: 's' for Simplified, 't' for Traditional")
     args = parser.parse_args()
 
     init_pinyin(use_g2pw=not args.no_g2pw)
+
+    # Set up OpenCC converter and prompt based on --chinese flag
+    if args.chinese == "s":
+        cc_pre = OpenCC('t2s')
+        cc_post = OpenCC('t2s')
+        active_system_prompt = SYSTEM_PROMPT_SIMPLIFIED
+        print("Chinese variant: Simplified (pre-processing with t2s, post-processing with t2s)")
+    else:
+        cc_pre = OpenCC('s2t')
+        cc_post = OpenCC('s2t')
+        active_system_prompt = SYSTEM_PROMPT
+        print("Chinese variant: Traditional (pre-processing with s2t, post-processing with s2t)")
 
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if not api_key:
@@ -737,9 +813,17 @@ def main():
     input_subs = parse_srt(args.input)
     print(f"  {len(input_subs)} segments")
 
+    # Pre-processing: convert input subtitles with OpenCC
+    for sub in input_subs:
+        sub.text = cc_pre.convert(sub.text)
+
     print(f"Parsing reference: {args.reference}")
     ref_subs = parse_srt(args.reference)
     print(f"  {len(ref_subs)} segments (raw)")
+
+    # Pre-processing: convert reference subtitles with OpenCC
+    for sub in ref_subs:
+        sub.text = cc_pre.convert(sub.text)
 
     ref_subs = clean_reference_subs(ref_subs)
     print(f"  {len(ref_subs)} segments (after cleaning)")
@@ -759,16 +843,28 @@ def main():
                     chinese_ref_lines.append(text)
         seen_ref = set()
         unique_ref_lines = [l for l in chinese_ref_lines if l not in seen_ref and not seen_ref.add(l)]
-        entity_prompt = (
-            "從以下動畫字幕中提取所有專有名詞（角色名、地名、組織名、種族名、技能名、怪物名等）。\n"
-            "注意：\n"
-            "- 只提取專有名詞，不要提取普通詞語\n"
-            "- 每個名詞只列一次\n"
-            "- 包含所有出現的人名，即使只出現一次（如 培斯塔、迦盧姆、葛洛姆）\n"
-            "- 包含所有怪物/生物的名稱（如 盔甲龍）\n"
-            "以JSON陣列格式回覆，例如：[\"利姆路\", \"德瓦崗\", \"培斯塔\"]\n\n"
-            f"字幕文本：\n" + "\n".join(unique_ref_lines[:200])
-        )
+        if args.chinese == "s":
+            entity_prompt = (
+                "从以下动画字幕中提取所有专有名词（角色名、地名、组织名、种族名、技能名、怪物名等）。\n"
+                "注意：\n"
+                "- 只提取专有名词，不要提取普通词语\n"
+                "- 每个名词只列一次\n"
+                "- 包含所有出现的人名，即使只出现一次（如 培斯塔、迦卢姆、葛洛姆）\n"
+                "- 包含所有怪物/生物的名称（如 盔甲龙）\n"
+                "以JSON数组格式回复，例如：[\"利姆路\", \"德瓦岗\", \"培斯塔\"]\n\n"
+                f"字幕文本：\n" + "\n".join(unique_ref_lines[:200])
+            )
+        else:
+            entity_prompt = (
+                "從以下動畫字幕中提取所有專有名詞（角色名、地名、組織名、種族名、技能名、怪物名等）。\n"
+                "注意：\n"
+                "- 只提取專有名詞，不要提取普通詞語\n"
+                "- 每個名詞只列一次\n"
+                "- 包含所有出現的人名，即使只出現一次（如 培斯塔、迦盧姆、葛洛姆）\n"
+                "- 包含所有怪物/生物的名稱（如 盔甲龍）\n"
+                "以JSON陣列格式回覆，例如：[\"利姆路\", \"德瓦崗\", \"培斯塔\"]\n\n"
+                f"字幕文本：\n" + "\n".join(unique_ref_lines[:200])
+            )
         for attempt in range(3):
             try:
                 econtent = call_openrouter([{"role": "user", "content": entity_prompt}],
@@ -790,7 +886,7 @@ def main():
         from wordfreq import word_frequency
         COMMON_WORD_THRESHOLD = 1e-6  # words more frequent than this are common vocabulary
         print(f"\nExtracting entity mappings...")
-        entity_mappings = extract_entity_mappings(ref_subs, input_subs, api_key, args.model)
+        entity_mappings = extract_entity_mappings(ref_subs, input_subs, api_key, args.model, simplified=(args.chinese == "s"))
         # Filter out common words using wordfreq, and require value appears in reference
         ref_full_text = " ".join(r.text for r in ref_subs)
         filtered_mappings = {}
@@ -823,7 +919,7 @@ def main():
             context.append(f"{marker} {input_subs[j].text}")
         try:
             # Step 1: LLM-based homophone detection (primary model)
-            fixes = get_fixes(sub.text, closest, context, api_key, args.model)
+            fixes = get_fixes(sub.text, closest, context, api_key, args.model, system_prompt=active_system_prompt)
             if fixes:
                 fixed = apply_fixes(sub.text, fixes)
             else:
@@ -871,6 +967,14 @@ def main():
         if normalized != sub.text:
             print(f"  [{sub.index}] {sub.text} → {normalized}")
             sub.text = normalized
+
+    # Post-processing: convert output with OpenCC
+    print(f"\nPost-processing with OpenCC...")
+    for sub in corrected_subs:
+        converted = cc_post.convert(sub.text)
+        if converted != sub.text:
+            print(f"  [{sub.index}] {sub.text} → {converted}")
+            sub.text = converted
 
     # Write output
     out_lines = []
