@@ -47,9 +47,16 @@ tag, and jieba frequency — the LLM does not bypass safety gates.
 The LLM mode catches non-homophone ASR errors the pinyin heuristic can't
 touch (朱雀↔朱母, pinyin distance 2 on one slot), context-dependent
 polyphone collapses (新宿↔星宿 where pypinyin reads 星宿 as a different
-compound), and semantic links (小丽→夏利 diminutive → full name). The
-heuristic still runs in parallel, and the two rulesets are unioned —
-the LLM augments rather than replaces the deterministic path.
+compound), and semantic links (小丽→夏利 diminutive → full name).
+
+The prompt is fully generic — it teaches the pinyin-clustering mechanism
+via common confusion pairs (菲/费, 利/丽/里, sh↔s, u↔uo, polyphones like
+宿 sù/xiù) without naming any specific show. Because a generic prompt
+sometimes picks the wrong canonical direction, the union with the
+heuristic ruleset uses heuristic-wins-on-direction-conflict, and a
+path-compression step collapses chained rules (LLM A→B + heuristic B→C
+⇒ A→C). A final pinyin-near expansion scans for variants the LLM
+missed using context-free per-char pinyin to defeat polyphones.
 """
 from __future__ import annotations
 
@@ -182,6 +189,27 @@ _JIEBA_KNOWN_THRESHOLD = 3
 # hijacking a pinyin cluster.
 _JIEBA_COMMON_NOUN_MAX_FREQ = 50
 _PROPER_NOUN_TAGS = frozenset({"nr", "nrt", "ns", "nt", "nz"})
+# POS tags for clearly-non-entity words — verbs/adjectives/adverbs/
+# time/locative/direction/particle/measure/pronoun. A canonical tagged
+# as any of these (or containing a segment tagged any of these) is
+# almost certainly a common Chinese word that happens to share pinyin
+# with a real entity, not the entity itself.
+_NON_ENTITY_POS_TAGS = frozenset({
+    "v", "vn", "vd", "vg",
+    "a", "ad", "an", "ag",
+    "d", "dg",
+    "t", "f", "s",
+    "p", "c", "u", "e", "y",
+    "m", "q", "r",
+})
+
+
+def _has_non_entity_pos(word: str) -> bool:
+    """Any jieba segment of `word` tagged as a clearly-non-entity POS?
+    Checks all segments, not just the longest, so '小/a + 袋子/n' fails
+    on the 'a' prefix even though the longer token is a noun."""
+    import jieba.posseg as psg
+    return any(p.flag in _NON_ENTITY_POS_TAGS for p in psg.cut(word))
 
 
 def _looks_entity_like(word: str) -> bool:
@@ -285,38 +313,36 @@ def _jieba_boundaries(text: str) -> set[int]:
 _OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 _DEFAULT_LLM_MODEL = "qwen/qwen3-235b-a22b-2507"
 
-_LLM_PROMPT = """你是一名专业的中文字幕校对编辑。以下是一整集动画的ASR语音识别转录字幕。
+_LLM_PROMPT = """你是一名专业的中文字幕校对编辑。以下是一整集动画（或影视剧）的 ASR 语音识别转录字幕。
 
-ASR因为发音相近会把同一个命名实体（角色名、姓氏、地名、组织名、外语音译词）写成几种不同的汉字。你的工作是把这些写法聚合到一起。
+ASR 因为发音相近，会把同一个命名实体（角色名、姓氏、地名、组织名、外语音译词）写成几种不同的汉字组合。你的工作是把这些写法聚合到同一个实体下。
 
-**关键做法：对每一个命名实体，先想出它的拼音序列，然后在转录里逐句扫描所有发音相近（每个位置同音或近音）的汉字组合，把它们全部收进 variants，不要遗漏。**
+**核心流程：对每一个命名实体，先把它的拼音序列写出来，然后在整段转录里逐句扫描发音相近的汉字组合——每个字位置上同音或差一个声/韵母——把它们全部收进 variants。**
 
-典型聚合样板（阅读时请照着找）：
-- 「新宿」(xīn sù) 的变体：「心宿 xīn sù」、「心素 xīn sù」、「心术 xīn shù」、「星宿 xīng sù」 —— 每个位置同音或差一个音。
-- 「鲁鲁修」(lǔ lǔ xiū) 的变体：「鲁路修 lǔ lù xiū」。**「鲁鲁兄」(lǔ lǔ xiōng) 不是变体**，因为「兄 xiōng」和「修 xiū」发音差太远，而且「兄」是称谓。
-- 「不列颠尼亚」(bù liè diān ní yà) 的变体：「布列颠尼亚 bù liè diān ní yà」。
-- 「克洛维斯」(kè luò wéi sī) 的变体：「克鲁维斯 kè lǔ wéi sī」 —— 只第二字差一个音。
-- 「枢木朱雀」(shū mù zhū què) 的变体：「苏慕朱雀 sū mù zhū què」 —— 「枢 shū」和「苏 sū」近音，「木 mù」和「慕 mù」同音。
-- 「小狮子」(xiǎo shī zi) 的变体：「孝世子 xiào shì zi」、「校狮子 xiào shī zi」、「叫世子 jiào shì zi」 —— 口语中 xiǎo/xiào/jiào 常被混听。
-- 「朱雀」(zhū què) 的变体：「朱母 zhū mǔ」—— 只第二字被听错。
-- 「卡莲·休坦菲尔特」的姓：「休坦菲尔特」「休坦费尔特」 —— 「菲 fēi」和「费 fèi」同音。
-- 「利瓦尔 / 丽瓦尔 / 里瓦尔」(lì wǎ ěr) 同一个人三种写法。
-- 「夏利 / 夏丽」(xià lì) 同一个人两种写法。
-- 「卡莲」(kǎ lián) 的变体：「彩莲 cǎi lián」。
+ASR 产生的同一实体多种写法，常见来源：
+1. **同音字替换**：每个字的拼音完全相同，只是汉字不同。例如「菲 fēi / 费 fèi」「利 lì / 丽 lì / 里 lǐ」「洪 hóng / 红 hóng」「朱 zhū / 珠 zhū」。
+2. **近音字替换**：某一字的声母或韵母差一个音。例如声母差异 l/n、f/h、z/zh、c/ch、s/sh、j/q、sh/s、n/l；韵母差异 u/uo、in/ing、an/ang、iu/iong、e/ei。
+3. **多音字分裂**：同一个汉字本身有两种读音，ASR 在不同上下文里按不同读音听写，结果写成不同字。例如「宿」可读 sù 或 xiù；「行」可读 xíng 或 háng；「乐」可读 lè 或 yuè。这类错误要尤其注意，因为拼音序列会整体偏移一个字。
+4. **连续轻辅音脱/加**：例如 xiao/xiǎo ↔ xiào ↔ jiào，shi ↔ si，tuan ↔ duan。
 
 任务：
-1. 通读整段转录，找出所有命名实体（角色名、姓氏、名字、地名、组织名、音译外语名）。
-2. 对每个实体，**主动** 在转录中搜索所有发音相似的汉字写法，全部列出。**即使只出现一次也要列。**
-3. 为每个实体选定 canonical：如果常识能判断（新宿是东京地名、枢木朱雀是 Code Geass 角色），用那个；否则用出现最多的那种。
-4. 回复JSON数组：[{"canonical": "...", "variants": ["...", ...]}, ...]
+1. 通读整段转录，找出所有命名实体（角色名、姓氏、名字、地名、组织名、音译外语名、势力名、种族名、专有技能名等专有名词）。
+2. 对每个实体，**主动** 在整个转录里搜索所有发音相似的汉字写法，全部列出。即使某个写法只出现一次也必须列出。**特别注意检查那些一出现就显得突兀、和上下文意思不搭的词**——它们通常就是同一实体的同音/近音误写。
+3. 选定 canonical 的规则（按优先级从高到低）：
+   (a) 最像一个真实的人名/地名/外语音译词（整体读着像一个专有名词，而不是日常词语的拼接）。
+   (b) 避开碰巧撞上该拼音的高频普通词汇。如果某个写法作为普通中文词汇非常常见（例如「成天」「杀死」「社团」「落网」「家里」），那它几乎肯定不是 canonical —— 另一个同音/近音写法才是真实体。
+   (c) 在同样合理的候选里，用转录中出现次数最多的那一个。
+4. 回复 JSON 数组：[{"canonical": "...", "variants": ["...", ...]}, ...]
 
 硬性要求（违反则整条作废）：
-- **variants 必须与 canonical 字数完全相同**。带称谓/修饰的长形式（「鲁鲁兄」「克洛维斯殿下」「朱雀一等」「坦菲尔特」作为「休坦菲尔特」的子串）绝不是变体。
-- 只收录专有名词。不要「殿下」「哥哥」「同学」「先生」这类称谓。
-- 变体和 canonical 每个位置的读音必须相同或极近（edit distance ≤ 2 on pinyin syllable）。
-- 只用转录中真实出现的字符串，不要臆造。
-- 如果没有任何实体，回复 []。
-- 直接输出 JSON 数组。不要代码块，不要 <think>，不要解释。
+- **variants 必须与 canonical 字数完全相同**。带称谓/修饰的长形式（例如在名字后附加「殿下」「先生」「小姐」「兄」「姐」「哥哥」「同学」「一等」「大人」「将军」「队长」「家」「社」「殿」，或名字前缀「小」「老」「大」）绝不是裸名字的变体；两者字数不同，不要合并。
+- 短子串也不是变体：如果实体是四字复合名，不要把三字子串当作变体。
+- 只收录专有名词。普通词汇、动词、形容词、副词、时间词、方位词、称谓（如「殿下」「同学」「家里」「大叔」「成天」「落网」「晚餐」「遗物」「发誓」「杀死」「离席」「下次」「黄花」）一律不是命名实体。
+- **不同角色可能拼音相近但是是独立的实体，绝不合并**。两个同音的名字分别是两个不同的角色（例如「妮娜 Nina」和「娜娜 Nunnally」），一个是甲角色一个是乙角色，各自在不同语境引入，千万不要当成同一个人的两种写法。判断：如果两个写法在转录里都以明确引入某个人的方式出现（如「我是 X」「X 是谁」「我叫 X」），它们多半是两个不同的实体。
+- 变体和 canonical 每个位置的汉字读音必须相同或极近（单个音节 edit distance ≤ 2 on pinyin）。相差超过一个音节就不是变体。
+- 只用转录中真实出现的字符串，不要臆造，也不要对字符做「合理化」修正。
+- 如果转录中没有任何命名实体，回复 []。
+- 直接输出 JSON 数组。不要代码块包装，不要 <think>，不要任何解释文字。
 
 转录："""
 
@@ -398,6 +424,10 @@ def _extract_entities_llm(
         content = re.sub(
             r"^```(?:json)?\s*|\s*```$", "", content, flags=re.MULTILINE
         ).strip()
+        # Qwen occasionally sneaks a literal newline/tab into a JSON string;
+        # strict json.loads rejects it. Strip control chars inside string
+        # literals before parsing.
+        content = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", content)
         try:
             parsed = json.loads(content)
         except json.JSONDecodeError as exc:
@@ -424,24 +454,11 @@ def _extract_entities_llm(
     # Pre-compute the text body once for variant-existence filtering.
     joined_text = "\n".join(c["text"] for c in cues)
 
-    # POS tags jieba uses for clearly-non-entity words. A form tagged as
-    # a verb/adjective/adverb/time-word/particle/locative/direction is
-    # not a proper noun regardless of how the LLM labelled it.
-    _LLM_REJECT_TAGS = frozenset({
-        "v", "vn", "vd", "vg",
-        "a", "ad", "an", "ag",
-        "d", "dg",
-        "t", "f", "s",
-        "p", "c", "u", "e", "y",
-        "m", "q", "r",
-    })
-
-    def _has_reject_tag(word: str) -> bool:
-        """Any jieba segment of `word` in the reject-POS set? Catches
-        '小/a 袋子/n' where the main-token heuristic returns 'n' and
-        misses the adjective prefix."""
-        import jieba.posseg as psg
-        return any(p.flag in _LLM_REJECT_TAGS for p in psg.cut(word))
+    # POS/freq helpers moved to module-level (_NON_ENTITY_POS_TAGS,
+    # _has_non_entity_pos) so the expansion pass in normalize_cues can
+    # reuse them.
+    _LLM_REJECT_TAGS = _NON_ENTITY_POS_TAGS
+    _has_reject_tag = _has_non_entity_pos
 
     # Union with majority canonical: each variant gets Counter of candidate
     # canonicals across runs. Resolve by most-seen canonical; ties fall to
@@ -488,12 +505,17 @@ def _extract_entities_llm(
                 continue
             # Variant POS/freq filter: block LLM proposing common Chinese
             # vocabulary (下次 f, 小袋子 a/n composite, 杀死 v 1588,
-            # 一般 n 30k) as variants of a name even when the pinyin
-            # roughly matches.
+            # 一般 n 30k, 离席 n 70) as variants of a name even when the
+            # pinyin roughly matches.
             if _has_reject_tag(v):
                 continue
             v_freq = _jieba_freq(v)
-            if _jieba_main_tag(v) == "n" and v_freq > 200:
+            if _jieba_main_tag(v) == "n" and v_freq > 50:
+                continue
+            # Variant must not itself be a jieba-known proper noun: that
+            # would mean it's likely a distinct entity (妮娜=Nina vs
+            # 娜娜=Nunnally) and the LLM mis-grouped them.
+            if _is_distinct_entity(v):
                 continue
             variant_votes[v][canonical] += 1
             if canonical not in first_seen_order:
@@ -588,67 +610,8 @@ def _extract_entities_llm(
                 continue
             replacements[m] = canon
             per_canonical[canon].append(m)
-    # Expansion: for each accepted canonical, scan every jieba-aligned
-    # Han span of matching length in the cue text and enroll any span
-    # whose pinyin is ≤1 syllable-position off (with char edit ≤ 2) that
-    # the LLM didn't list. Catches variants the LLM sometimes misses
-    # across runs (星宿 for 新宿, 叫世子 for 小狮子). Each candidate still
-    # has to pass the same variant-side filters.
-    canonical_set = set(per_canonical.keys())
-    # Context-free per-char pinyin — flattens polyphones so 宿 is always
-    # 'sù' regardless of surrounding chars, letting 星宿↔新宿 read as a
-    # single-slot diff (xing vs xin) instead of two.
-    canonical_pinyin = {c: _context_free_pinyin(c) for c in canonical_set}
-    scanned: set[tuple[int, tuple[str, ...], str]] = set()
-    for cue in cues:
-        text = cue["text"]
-        boundaries = _jieba_boundaries(text)
-        for run_start, run in _han_runs(text):
-            run_py = _context_free_pinyin(run)
-            R = len(run)
-            for canon, py_c in canonical_pinyin.items():
-                L = len(canon)
-                if L > R:
-                    continue
-                for i in range(R - L + 1):
-                    a, b = run_start + i, run_start + i + L
-                    if a not in boundaries or b not in boundaries:
-                        continue
-                    span = run[i : i + L]
-                    if span == canon or span in replacements:
-                        continue
-                    py_s = run_py[i : i + L]
-                    key = (L, py_s, canon)
-                    if key in scanned:
-                        continue
-                    scanned.add(key)
-                    if len(py_c) != len(py_s):
-                        continue
-                    diffs = [
-                        k for k, (x, y) in enumerate(zip(py_c, py_s))
-                        if x != y
-                    ]
-                    if len(diffs) != 1:
-                        continue
-                    if _syllable_char_edit(py_c[diffs[0]], py_s[diffs[0]]) > 2:
-                        continue
-                    # Variant-side filters: no function chars, not a
-                    # distinct proper noun, entity-ish POS in every
-                    # jieba segment. Canonical is LLM-confirmed so we
-                    # accept a higher 'n' freq (星宿 freq 551 is a legit
-                    # ASR variant of 新宿) but still refuse verbs/
-                    # adjectives/adverbs/locative/direction.
-                    if any(ch in _FUNCTION_CHARS for ch in span):
-                        continue
-                    if _is_distinct_entity(span):
-                        continue
-                    if _has_reject_tag(span):
-                        continue
-                    if _jieba_main_tag(span) == "n" and _jieba_freq(span) > 1000:
-                        continue
-                    replacements[span] = canon
-                    per_canonical[canon].append(span)
-
+    # Pinyin-near expansion happens after we union with heuristic rules
+    # in normalize_cues — this LLM step only returns the consensus map.
     for canon, vs in per_canonical.items():
         kept_entities.append((canon, vs))
 
@@ -923,12 +886,83 @@ def normalize_cues(
 
     # 3) Union LLM-proposed rules on top. LLM catches context-driven fixes
     # that the pinyin heuristic can't see (星宿↔新宿 edit 1 but 星/新 are
-    # ambiguous out of context; 朱母↔朱雀 where mǔ/què are pinyin-distant;
-    # 十一军人↔十一区人 where the pinyin shift is non-homophone). If the
-    # LLM disagrees with the heuristic on a variant, LLM wins — we assume
-    # the LLM's choice is semantically better.
+    # ambiguous out of context; 朱母↔朱雀 where mǔ/què are pinyin-distant).
+    # If LLM disagrees with the heuristic on direction (LLM says A→B while
+    # heuristic says B→A), the heuristic wins — document-majority voting
+    # is more reliable than the LLM guessing on a generic prompt without
+    # show-specific hints.
     for wrong, correct in llm_replacements.items():
+        if replacements.get(correct) == wrong:
+            continue  # heuristic already reversed this pair
         replacements[wrong] = correct
+
+    # Path-compress: if A→B and B→C, collapse to A→C. Handles the case
+    # where LLM sends several variants to a form the heuristic already
+    # rewrites (LLM: 心素→心宿; heuristic: 心宿→新宿 → effective: 心素→新宿).
+    for _ in range(5):  # short bound — fixpoint within 2-3 rounds typically
+        changed = False
+        for src, dst in list(replacements.items()):
+            if dst in replacements and replacements[dst] != src:
+                replacements[src] = replacements[dst]
+                changed = True
+        if not changed:
+            break
+
+    # Expansion: after LLM + heuristic + path-compression, scan the
+    # transcription one more time for pinyin-near variants of every
+    # final canonical. Catches 星宿→新宿 (context-free pinyin differs at
+    # one char: xīng↔xīn) whether the canonical came from LLM or
+    # heuristic. Uses context-free per-char pinyin to neutralise
+    # polyphones (宿=sù always, not xiù-inside-星宿).
+    canonical_targets = set(replacements.values())
+    if canonical_targets:
+        canonical_pinyin = {
+            c: _context_free_pinyin(c) for c in canonical_targets
+        }
+        scanned: set[tuple[int, tuple[str, ...], str]] = set()
+        for cue in cues:
+            text = cue["text"]
+            boundaries = _jieba_boundaries(text)
+            for run_start, run in _han_runs(text):
+                run_py = _context_free_pinyin(run)
+                R = len(run)
+                for canon, py_c in canonical_pinyin.items():
+                    L = len(canon)
+                    if L > R:
+                        continue
+                    for i in range(R - L + 1):
+                        a, b = run_start + i, run_start + i + L
+                        if a not in boundaries or b not in boundaries:
+                            continue
+                        span = run[i : i + L]
+                        if span == canon or span in replacements:
+                            continue
+                        py_s = run_py[i : i + L]
+                        key = (L, py_s, canon)
+                        if key in scanned:
+                            continue
+                        scanned.add(key)
+                        if len(py_c) != len(py_s):
+                            continue
+                        diffs = [
+                            k for k, (x, y) in enumerate(zip(py_c, py_s))
+                            if x != y
+                        ]
+                        if len(diffs) != 1:
+                            continue
+                        if _syllable_char_edit(
+                            py_c[diffs[0]], py_s[diffs[0]]
+                        ) > 2:
+                            continue
+                        if any(ch in _FUNCTION_CHARS for ch in span):
+                            continue
+                        if _is_distinct_entity(span):
+                            continue
+                        if _has_non_entity_pos(span):
+                            continue
+                        if _jieba_main_tag(span) == "n" and _jieba_freq(span) > 1000:
+                            continue
+                        replacements[span] = canon
 
     # 4) Apply replacements (longest-first).
     new_cues, repl_counts = _apply_replacements(cues, replacements)
