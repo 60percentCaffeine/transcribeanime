@@ -33,6 +33,8 @@ import torch
 from whisperx.alignment import align, load_align_model
 from whisperx.audio import SAMPLE_RATE, load_audio
 
+from normalize_entities import normalize_cues as normalize_entity_cues
+
 # --- Pipeline settings (reproduces qwen_wxalign_geass.v2.srt) ---------------
 ALIGN_LANGUAGE = "zh"
 ALIGN_MODEL = "ydshieh/wav2vec2-large-xlsr-53-chinese-zh-cn-gpt"
@@ -301,7 +303,15 @@ def realign_cues(cues: list[dict], audio_path: Path, device: str) -> list[dict]:
 
 
 # --- end-to-end per-file orchestration --------------------------------------
-def transcribe_one(input_path: Path, output_path: Path, device: str) -> None:
+def transcribe_one(
+    input_path: Path,
+    output_path: Path,
+    device: str,
+    *,
+    llm_entities: bool = False,
+    llm_api_key: str | None = None,
+    llm_runs: int = 3,
+) -> None:
     work_root = Path(tempfile.mkdtemp(prefix="transcribeanime_"))
     wjav_out = work_root / "wjav"
     wjav_out.mkdir()
@@ -317,6 +327,12 @@ def transcribe_one(input_path: Path, output_path: Path, device: str) -> None:
 
         realigned = realign_cues(cues, input_path, device)
         realigned.sort(key=lambda c: (c["start"], c["end"]))
+        realigned, _ = normalize_entity_cues(
+            realigned,
+            use_llm=llm_entities,
+            llm_api_key=llm_api_key,
+            llm_runs=llm_runs,
+        )
         write_srt(realigned, output_path)
         print(f"[out] {output_path} ({output_path.stat().st_size} bytes, "
               f"{len(realigned)} cues)")
@@ -379,6 +395,13 @@ def main() -> int:
                         "(default: s).")
     p.add_argument("--device", default=None,
                    help="Device for the aligner. Default: cuda if available.")
+    p.add_argument("--llm-entities", action="store_true",
+                   help="Also use an LLM (OpenRouter) to detect named "
+                        "entities in the realigned SRT. Unioned with the "
+                        "pinyin/jieba heuristic. Requires OPENROUTER_API_KEY.")
+    p.add_argument("--llm-runs", type=int, default=3,
+                   help="LLM consensus runs (default 3). Each run has a "
+                        "small temperature jitter; results are unioned.")
     args = p.parse_args()
 
     device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -424,10 +447,29 @@ def main() -> int:
     if args.output_dir is not None:
         args.output_dir.mkdir(parents=True, exist_ok=True)
 
+    llm_api_key: str | None = None
+    if args.llm_entities:
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+        except ImportError:
+            pass
+        import os as _os
+        llm_api_key = _os.environ.get("OPENROUTER_API_KEY")
+        if not llm_api_key:
+            print("--llm-entities requires OPENROUTER_API_KEY (set in .env or the environment).",
+                  file=sys.stderr)
+            return 2
+
     for src in args.inputs:
         out_dir = args.output_dir if args.output_dir is not None else src.parent
         dst = (out_dir / f"{src.stem}.srt").resolve()
-        transcribe_one(src.resolve(), dst, device)
+        transcribe_one(
+            src.resolve(), dst, device,
+            llm_entities=args.llm_entities,
+            llm_api_key=llm_api_key,
+            llm_runs=args.llm_runs,
+        )
         if not args.nofix:
             run_fixtranscribeanime(dst, references[src].resolve(), args.chinese)
 
