@@ -34,6 +34,7 @@ from whisperx.alignment import align, load_align_model
 from whisperx.audio import SAMPLE_RATE, load_audio
 
 from normalize_entities import normalize_cues as normalize_entity_cues
+from split_cues import split_cues
 
 # --- Pipeline settings (reproduces qwen_wxalign_geass.v2.srt) ---------------
 ALIGN_LANGUAGE = "zh"
@@ -181,6 +182,31 @@ def normalize_for_align(text: str, rules) -> str:
     return out
 
 
+def _map_chars_to_text(text: str, aligned: list[dict]) -> list[dict]:
+    """Produce one entry per char in `text`, merging in timings from `aligned`.
+
+    The aligner ran on `normalize_for_align(text)` — whitespace stripped.
+    So `aligned` is 1:1 with the non-whitespace chars of `text` (ordered).
+    """
+    out: list[dict] = []
+    ai = 0
+    for ch in text:
+        if ch.isspace():
+            out.append({"char": ch, "start": None, "end": None})
+            continue
+        if ai < len(aligned):
+            w = aligned[ai]
+            ai += 1
+            out.append({
+                "char": ch,
+                "start": w.get("start"),
+                "end": w.get("end"),
+            })
+        else:
+            out.append({"char": ch, "start": None, "end": None})
+    return out
+
+
 # --- wav2vec2 realignment ---------------------------------------------------
 def realign_cues(cues: list[dict], audio_path: Path, device: str) -> list[dict]:
     """Run whisperx align() per cue, replacing start/end with word min/max.
@@ -255,12 +281,17 @@ def realign_cues(cues: list[dict], audio_path: Path, device: str) -> list[dict]:
 
         word_starts: list[float] = []
         word_ends: list[float] = []
+        aligned_words: list[dict] = []
         for sub in result["segments"]:
             for w in sub.get("words", []):
+                entry: dict = {"char": w.get("word", "")}
                 if "start" in w:
                     word_starts.append(w["start"])
+                    entry["start"] = float(w["start"])
                 if "end" in w:
                     word_ends.append(w["end"])
+                    entry["end"] = float(w["end"])
+                aligned_words.append(entry)
 
         if word_starts and word_ends:
             new_start = float(min(word_starts))
@@ -281,10 +312,19 @@ def realign_cues(cues: list[dict], audio_path: Path, device: str) -> list[dict]:
 
             if new_end < new_start:
                 new_start, new_end = start, end
-            out_cues.append({"start": new_start, "end": new_end, "text": text})
+            # Map per-char timings back onto cue["text"]: align_text is
+            # text with whitespace stripped (and digits → hanzi, but those
+            # don't occur in practice). Whitespace chars get no timing.
+            chars = _map_chars_to_text(text, aligned_words)
+            out_cues.append({
+                "start": new_start, "end": new_end, "text": text,
+                "chars": chars,
+            })
         else:
             n_fallback += 1
-            out_cues.append({"start": start, "end": end, "text": text})
+            out_cues.append({
+                "start": start, "end": end, "text": text, "chars": None,
+            })
 
         if (idx + 1) % 50 == 0 or (idx + 1) == len(cues):
             print(f"[align] {idx+1}/{len(cues)} cues "
@@ -311,6 +351,8 @@ def transcribe_one(
     llm_entities: bool = False,
     llm_api_key: str | None = None,
     llm_runs: int = 3,
+    split: bool = True,
+    flag_split: bool = False,
 ) -> None:
     work_root = Path(tempfile.mkdtemp(prefix="transcribeanime_"))
     wjav_out = work_root / "wjav"
@@ -327,12 +369,18 @@ def transcribe_one(
 
         realigned = realign_cues(cues, input_path, device)
         realigned.sort(key=lambda c: (c["start"], c["end"]))
+        if split:
+            realigned = split_cues(realigned)
         realigned, _ = normalize_entity_cues(
             realigned,
             use_llm=llm_entities,
             llm_api_key=llm_api_key,
             llm_runs=llm_runs,
         )
+        if flag_split:
+            for cue in realigned:
+                if cue.get("split"):
+                    cue["text"] = cue["text"].rstrip() + " (SPLIT)"
         write_srt(realigned, output_path)
         print(f"[out] {output_path} ({output_path.stat().st_size} bytes, "
               f"{len(realigned)} cues)")
@@ -402,6 +450,12 @@ def main() -> int:
     p.add_argument("--llm-runs", type=int, default=3,
                    help="LLM consensus runs (default 3). Each run has a "
                         "small temperature jitter; results are unioned.")
+    p.add_argument("--no-split", dest="split", action="store_false",
+                   help="Skip cue splitting (keep realigner's original cue "
+                        "boundaries).")
+    p.add_argument("--flag-split", action="store_true",
+                   help="Append ' (SPLIT)' to cues that came from splitting "
+                        "a long cue (for debugging/inspection).")
     args = p.parse_args()
 
     device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -469,6 +523,8 @@ def main() -> int:
             llm_entities=args.llm_entities,
             llm_api_key=llm_api_key,
             llm_runs=args.llm_runs,
+            split=args.split,
+            flag_split=args.flag_split,
         )
         if not args.nofix:
             run_fixtranscribeanime(dst, references[src].resolve(), args.chinese)
