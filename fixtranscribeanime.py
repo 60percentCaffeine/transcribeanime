@@ -794,15 +794,15 @@ def main():
 
     # Set up OpenCC converter and prompt based on --chinese flag
     if args.chinese == "s":
-        cc_pre = OpenCC('t2s')
-        cc_post = OpenCC('t2s')
+        cc_pre = OpenCC('tw2s')
+        cc_post = OpenCC('tw2s')
         active_system_prompt = SYSTEM_PROMPT_SIMPLIFIED
-        print("Chinese variant: Simplified (pre-processing with t2s, post-processing with t2s)")
+        print("Chinese variant: Simplified (pre-processing with tw2s, post-processing with tw2s)")
     else:
-        cc_pre = OpenCC('s2t')
-        cc_post = OpenCC('s2t')
+        cc_pre = OpenCC('s2tw')
+        cc_post = OpenCC('s2tw')
         active_system_prompt = SYSTEM_PROMPT
-        print("Chinese variant: Traditional (pre-processing with s2t, post-processing with s2t)")
+        print("Chinese variant: Traditional (pre-processing with s2tw, post-processing with s2tw)")
 
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if not api_key:

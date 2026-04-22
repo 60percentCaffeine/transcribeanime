@@ -5,10 +5,13 @@ description = ""
 authors = [
     {name = "Your Name",email = "you@example.com"}
 ]
-requires-python = ">=3.11,<4"
+requires-python = ">=3.11,<3.13"
 dependencies = [
     "pyobjc-framework-speech (>=12.1,<13.0) ; sys_platform == 'darwin'",
     "mlx-whisper (>=0.4.3,<0.5.0) ; sys_platform == 'darwin'",
+    "whisperx (>=3.8.0,<4.0.0) ; sys_platform == 'linux'",
+    "whisperjav @ git+https://github.com/meizhong986/whisperjav.git@e4768e8316be79ea12d611e62e6a2ebb044ad297 ; sys_platform == 'linux'",
+    "opencc-python-reimplemented (>=0.1.7,<0.2.0)",
     "requests (>=2.32.5,<3.0.0)",
     "python-dotenv (>=1.2.2,<2.0.0)",
     "pypinyin (>=0.55.0,<0.56.0)",
