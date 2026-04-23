@@ -35,6 +35,7 @@ from whisperx.audio import SAMPLE_RATE, load_audio
 
 from normalize_entities import normalize_cues as normalize_entity_cues
 from split_cues import split_cues
+from snap_onset import snap_cumulative_char_dur
 
 # --- Pipeline settings (reproduces qwen_wxalign_geass.v2.srt) ---------------
 ALIGN_LANGUAGE = "zh"
@@ -353,6 +354,7 @@ def transcribe_one(
     llm_runs: int = 3,
     split: bool = True,
     flag_split: bool = False,
+    snap_onset_s: float = 1.0,
 ) -> None:
     work_root = Path(tempfile.mkdtemp(prefix="transcribeanime_"))
     wjav_out = work_root / "wjav"
@@ -371,6 +373,10 @@ def transcribe_one(
         realigned.sort(key=lambda c: (c["start"], c["end"]))
         if split:
             realigned = split_cues(realigned)
+        if snap_onset_s > 0:
+            realigned = snap_cumulative_char_dur(
+                realigned, threshold_s=snap_onset_s,
+            )
         realigned, _ = normalize_entity_cues(
             realigned,
             use_llm=llm_entities,
@@ -456,6 +462,10 @@ def main() -> int:
     p.add_argument("--flag-split", action="store_true",
                    help="Append ' (SPLIT)' to cues that came from splitting "
                         "a long cue (for debugging/inspection).")
+    p.add_argument("--snap-onset", type=float, default=1.0,
+                   help="Advance each cue start past the first N seconds of "
+                        "wav2vec-aligned character content (default 1.0). "
+                        "Set to 0 to disable.")
     args = p.parse_args()
 
     device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -525,6 +535,7 @@ def main() -> int:
             llm_runs=args.llm_runs,
             split=args.split,
             flag_split=args.flag_split,
+            snap_onset_s=args.snap_onset,
         )
         if not args.nofix:
             run_fixtranscribeanime(dst, references[src].resolve(), args.chinese)

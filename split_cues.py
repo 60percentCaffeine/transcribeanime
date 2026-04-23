@@ -190,7 +190,8 @@ def split_cues(
             or duration > split_over_duration_s
         )
         if not too_long or not chars or not isinstance(chars, list):
-            out.append({"start": start, "end": end, "text": text, "split": False})
+            out.append({"start": start, "end": end, "text": text,
+                        "split": False, "chars": chars})
             continue
 
         pieces = _build_chunks(
@@ -199,7 +200,8 @@ def split_cues(
             max_chars=max_chars, min_duration_s=min_duration_s,
         )
         if len(pieces) <= 1:
-            out.append({"start": start, "end": end, "text": text, "split": False})
+            out.append({"start": start, "end": end, "text": text,
+                        "split": False, "chars": chars})
             continue
 
         # First piece's start and last piece's end inherit the cue bounds
@@ -220,7 +222,8 @@ def split_cues(
                 if pe < ps:
                     pe = ps + min_duration_s
             entry = {"start": ps, "end": pe, "text": chunk_text,
-                     "split": True, "_cue_group": id(cue)}
+                     "split": True, "chars": chars[lo:hi],
+                     "_cue_group": id(cue)}
             out.append(entry)
             n_produced += 1
         n_split += 1
